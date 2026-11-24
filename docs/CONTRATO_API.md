@@ -24,6 +24,14 @@ Resposta `200`: `{ "telefone": "81999887766", "enviado": true }`
 
 Resposta `200`: `{ "telefone": "81999887766", "token": "..." }`. Código errado: `401` com `{ "erro": "codigo_invalido" }`.
 
+Telefone com menos de 10 ou mais de 11 números: `400` com `{ "erro": "telefone_invalido" }`. O código vale por 10 minutos e só pode ser usado uma vez. Em desenvolvimento, `1234` sempre funciona (`arremate.auth.codigo-fixo`).
+
+`GET /auth/sessao` (com token): `200` com `{ "id": 1, "telefone": "81999887766", "criadoEm": "..." }`.
+
+`POST /auth/sair` (com token): `204`. O token deixa de valer.
+
+Qualquer rota protegida sem token, ou com token inválido: `401` com `{ "erro": "nao_autenticado" }`.
+
 ## Perfil
 
 `PUT /perfil`
