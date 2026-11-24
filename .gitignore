@@ -1,0 +1,15 @@
+node_modules/
+dist/
+dist-prototipo/
+.env
+.env.local
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+target/
+__pycache__/
+
+# Banco H2 local do back-end
+backend/data/

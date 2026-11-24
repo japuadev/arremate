@@ -1,0 +1,30 @@
+/* Cor única do app: índigo, com ouro no fio. Verde e vermelho só indicam acerto e alerta. */
+:root {
+  --escala: 1;
+
+  --indigo: #1F3A73;
+  --indigo-escuro: #152A56;
+  --ouro: #E0A526;
+  --verde: #2F6B4F;
+  --linha: #B8C3D9;
+  --bege: #EDF0F7;
+  --papel: #FFFFFF;
+  --tinta: #1B2238;
+  --tinta-suave: #4A5168;
+  --alerta: #8B1A1A;
+
+  --trilha-organizar: var(--indigo);
+  --trilha-organizar-icone: #fff;
+  --trilha-formalizar: var(--indigo);
+  --trilha-formalizar-icone: #fff;
+  --trilha-dinheiro: var(--indigo);
+  --trilha-dinheiro-icone: #fff;
+  --trilha-proteger: var(--indigo);
+  --trilha-proteger-icone: #fff;
+
+  --fonte-titulo: 'Lexend', system-ui, sans-serif;
+  --fonte-texto: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+
+  --toque: 3.2rem;
+  --largura: 34rem;
+}

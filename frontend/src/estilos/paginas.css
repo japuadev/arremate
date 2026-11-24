@@ -1,0 +1,94 @@
+.abertura .jeans-costura { min-height: 15rem; justify-content: flex-end; }
+.marca { font-size: 3.2rem; color: #fff; letter-spacing: -.02em; }
+.fio { width: 100%; height: 1rem; margin-top: -.35rem; }
+.fio path { fill: none; stroke: var(--ouro); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 11 8; }
+.abertura-texto { font-size: 1.1rem; }
+.nota-baixa { color: var(--tinta-suave); }
+.texto-grande { font-size: 1.15rem; }
+.forte { font-weight: 700; }
+
+.painel-contagem { font-weight: 700; }
+.pesponto { display: flex; align-items: center; margin-top: .4rem; }
+.pesponto i { flex: 1; height: 0; border-top: 3px dashed rgba(255,255,255,.4); }
+.pesponto i.feito { border-top: 3px solid var(--ouro); }
+.pesponto i.atual { border-top: 3px dashed var(--ouro); }
+
+.atalhos { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+.atalho { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .2rem; min-height: 5.2rem; background: var(--bege); border-radius: .8rem; color: var(--indigo-escuro); font-weight: 700; text-decoration: none; }
+.linha-atalho { display: flex; align-items: center; gap: .8rem; padding: .8rem; background: var(--bege); border-radius: .8rem; text-decoration: none; }
+
+.resultado h1 { color: #fff; }
+.ordem { counter-reset: o; display: flex; flex-direction: column; gap: .5rem; }
+.ordem li { counter-increment: o; display: flex; align-items: center; gap: .7rem; font-weight: 700; font-size: 1.05rem; }
+.ordem li::before { content: counter(o) "."; font-family: var(--fonte-titulo); width: 1.4rem; }
+
+.trilha-cabeca { display: flex; gap: .8rem; align-items: center; }
+
+/* A trilha "costurada": fio ouro ligando botões de roupa */
+.costura { display: flex; flex-direction: column; }
+.costura-item { position: relative; display: flex; align-items: center; gap: .6rem; padding: .4rem 0; }
+.costura-item::before { content: ""; position: absolute; left: 1.2rem; top: 0; bottom: 0; border-left: 3px dashed var(--linha); transform: translateX(-1.5px); }
+.costura-item:first-child::before { top: 50%; }
+.costura-item:last-child::before { bottom: 50%; }
+.costura-item:only-child::before { display: none; }
+.costura-item.no-feito::before { border-left-color: var(--ouro); border-left-style: solid; }
+.costura-item.no-atual::before { border-left-color: var(--ouro); }
+.botao-roupa { position: relative; z-index: 1; flex: none; width: 2.4rem; height: 2.4rem; border-radius: 50%; display: grid; grid-template-columns: repeat(2, .4rem); grid-auto-rows: .4rem; gap: .22rem; place-content: center; background: #fff; border: 2px solid var(--indigo); }
+.botao-roupa i { background: var(--indigo); border-radius: 50%; }
+.no-atual .botao-roupa { background: var(--ouro); border-color: var(--tinta); }
+.no-atual .botao-roupa i { background: var(--tinta); }
+.no-feito .botao-roupa { display: flex; align-items: center; justify-content: center; background: var(--verde); border-color: var(--verde); color: #fff; }
+
+.desenho { align-self: center; width: 9rem; height: 9rem; border-radius: 1.4rem; background: var(--cor); color: var(--cor-icone); display: flex; align-items: center; justify-content: center; }
+.mini-tabela { width: 100%; border-collapse: collapse; background: #fff; font-size: 1.05rem; }
+.mini-tabela th { background: var(--indigo); color: #fff; text-align: left; padding: .5rem .6rem; font-family: var(--fonte-titulo); font-weight: 500; }
+.mini-tabela td { padding: .5rem .6rem; border: 1px solid var(--linha); }
+.mini-tabela .linha-total td { font-weight: 700; }
+
+.arremate-fim { display: flex; flex-direction: column; align-items: center; gap: .6rem; text-align: center; padding-top: .5rem; }
+.selo-ouro { width: 6rem; height: 6rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--ouro); color: var(--tinta); box-shadow: 0 0 0 4px var(--papel), 0 0 0 6px var(--tinta); }
+.confira { display: flex; flex-direction: column; gap: .35rem; }
+.confira li { display: flex; align-items: center; gap: .7rem; min-height: var(--toque); }
+.confira input, .alternar input { width: 1.7rem; height: 1.7rem; accent-color: var(--verde); flex: none; }
+.alternar { display: flex; align-items: center; gap: .7rem; min-height: var(--toque); font-weight: 700; }
+
+.placar { display: flex; gap: .5rem; align-items: center; font-weight: 700; }
+.mensagem { background: var(--bege); border-radius: .9rem; padding: .85rem; display: flex; flex-direction: column; gap: .5rem; }
+.mensagem-de { font-weight: 700; }
+.mensagem-balao { background: #fff; border-radius: .2rem .9rem .9rem .9rem; padding: .8rem; font-size: 1.15rem; }
+.duplo { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.sinais { display: flex; flex-direction: column; gap: .3rem; }
+.sinais li { padding-left: 1.1rem; position: relative; }
+.sinais li::before { content: ""; position: absolute; left: 0; top: .55em; width: .5rem; height: .5rem; background: var(--indigo); border-radius: 50%; }
+
+.numerados { counter-reset: n; display: flex; flex-direction: column; gap: .8rem; }
+.numerados li { counter-increment: n; display: flex; gap: .7rem; font-size: 1.1rem; }
+.numerados li::before { content: counter(n); flex: none; width: 2.1rem; height: 2.1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--indigo); color: #fff; font-family: var(--fonte-titulo); font-weight: 700; }
+
+.resumo { display: flex; flex-wrap: wrap; gap: .35rem 1.3rem; padding: .8rem; background: var(--bege); border-radius: .8rem; }
+.resumo p { display: flex; flex-direction: column; }
+.resumo strong { font-family: var(--fonte-titulo); font-size: 1.15rem; }
+.resumo-total strong { color: var(--verde); }
+.registros { display: flex; flex-direction: column; }
+.registro { display: flex; align-items: center; gap: .5rem; padding: .55rem 0; border-bottom: 1.5px dashed var(--linha); }
+.registro-texto { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-wrap: anywhere; }
+.botao-icone { flex: none; width: 2.75rem; height: 2.75rem; display: inline-flex; align-items: center; justify-content: center; background: none; border: 1.5px solid var(--linha); border-radius: .6rem; color: var(--indigo); }
+.contador { display: flex; align-items: center; gap: .35rem; }
+.contador b { min-width: 2rem; text-align: center; }
+.valor-entrou { color: var(--verde); white-space: nowrap; }
+.valor-saiu { color: var(--alerta); white-space: nowrap; }
+.situacao { min-height: 2.75rem; padding: 0 .55rem; border-radius: .6rem; border: 2px solid currentColor; background: #fff; font-weight: 700; white-space: nowrap; }
+.situacao-0 { color: var(--indigo); }
+.situacao-1 { color: var(--indigo); }
+.situacao-2 { color: var(--verde); }
+.vazio { padding: .9rem; border: 2px dashed var(--linha); border-radius: .8rem; }
+.caderno { padding-top: .4rem; }
+.opcao-pequena { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; min-height: var(--toque); background: #fff; border: 2px solid var(--linha); border-radius: .7rem; font-weight: 700; }
+.opcao-pequena[aria-pressed="true"] { border-color: var(--indigo); background: #E4E9F3; }
+
+.revisao { margin: 0; background: var(--bege); padding: .3rem .8rem; border-radius: .8rem; }
+.revisao div { padding: .55rem 0; border-bottom: 1px dashed var(--linha); }
+.revisao div:last-child { border-bottom: 0; }
+.revisao dt { color: var(--tinta-suave); }
+.revisao dd { margin: 0; font-weight: 700; font-size: 1.1rem; overflow-wrap: anywhere; }
+.confirmacao { display: flex; flex-direction: column; align-items: center; gap: .4rem; text-align: center; padding: 1.2rem 1rem; background: var(--verde); color: #fff; border-radius: 1rem; }

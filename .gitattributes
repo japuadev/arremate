@@ -1,0 +1,3 @@
+# mvnw precisa de LF para rodar no Linux/Mac; mvnw.cmd precisa de CRLF no Windows
+backend/mvnw text eol=lf
+*.cmd text eol=crlf

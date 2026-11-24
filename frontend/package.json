@@ -1,0 +1,21 @@
+{
+  "name": "arremate-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "prototipo": "vite build --mode prototipo && node scripts/copiar-prototipo.js",
+    "test": "node --test \"tests/*.test.js\""
+  },
+  "dependencies": {
+    "@fontsource/atkinson-hyperlegible-next": "^5.2.0",
+    "@fontsource/lexend": "^5.2.0"
+  },
+  "devDependencies": {
+    "vite": "^8.0.0",
+    "vite-plugin-singlefile": "^2.3.0"
+  }
+}
