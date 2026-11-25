@@ -3,6 +3,7 @@
 import { estado } from './estado.js';
 import { icone } from '../componentes/icones.js';
 import { ligarVerMais } from '../componentes/comuns.js';
+import { redirecionarAntiga } from './utilidades.js';
 import { ouvirTela, pararFala, aoMudarFala, estadoLeitura, pausarOuContinuar, trechoAnterior, proximoTrecho } from '../voz/sintese.js';
 import { blocosDeLeitura } from '../voz/leitura.js';
 import { abrirEscuta, definirTelaAtual } from '../voz/interface-voz.js';
@@ -13,7 +14,7 @@ import { paginaInicio } from '../paginas/inicio.js';
 import { paginaTrilha } from '../paginas/trilha.js';
 import { paginaAula } from '../paginas/aula.js';
 import { paginaGolpe } from '../paginas/golpe.js';
-import { paginaSocorro, paginaGuia } from '../paginas/socorro.js';
+import { paginaAjuda, paginaGuia } from '../paginas/ajuda.js';
 import { paginaFinancas, paginaPlanilha, paginaPreco } from '../paginas/planilhas.js';
 import { paginaSimuladorMei, paginaSimuladorNota } from '../paginas/simuladores.js';
 import { paginaAjustes } from '../paginas/ajustes.js';
@@ -27,8 +28,8 @@ const ROTAS = [
   [/^\/trilha\/([\w-]+)$/, paginaTrilha],
   [/^\/aula\/([\w-]+)$/, paginaAula],
   [/^\/golpe$/, paginaGolpe],
-  [/^\/socorro$/, paginaSocorro],
-  [/^\/socorro\/([\w-]+)$/, paginaGuia],
+  [/^\/ajuda$/, paginaAjuda],
+  [/^\/ajuda\/([\w-]+)$/, paginaGuia],
   [/^\/planilhas$/, paginaFinancas],
   [/^\/planilhas\/preco$/, paginaPreco],
   [/^\/planilhas\/([\w-]+)$/, paginaPlanilha],
@@ -42,7 +43,7 @@ const ABAS = [
   { rota: '/inicio', nome: 'Aprender', icone: 'inicio', ativa: /^\/(inicio|trilha|materiais)/ },
   { rota: '/planilhas', nome: 'Caixa', icone: 'dinheiro', ativa: /^\/planilhas/ },
   { rota: '/golpe', nome: 'É golpe?', icone: 'golpe', ativa: /^\/golpe/ },
-  { rota: '/socorro', nome: 'Socorro', icone: 'socorro', ativa: /^\/socorro/ },
+  { rota: '/ajuda', nome: 'Ajuda', icone: 'ajuda', ativa: /^\/ajuda/ },
 ];
 
 let raiz;
@@ -51,7 +52,7 @@ let rotaAtual = '';
 let ultimaTela = '';
 
 function resolver() {
-  const rota = location.hash.slice(1) || '/inicio';
+  const rota = redirecionarAntiga(location.hash.slice(1) || '/inicio');
   const publica = rota === '/entrar' || rota === '/codigo';
   if (!estado.sessao && !publica) return '/entrar';
   if (estado.sessao && !estado.perfil.diagnosticoFeito && rota !== '/diagnostico') return '/diagnostico';

@@ -9,7 +9,7 @@ src/
   api/               simulada.js (hoje) e http.js (quando o back existir)
   voz/               reconhecimento, leitura em voz alta e comandos
   personalizacao/    vocabulário por perfil e ordem das trilhas
-  dados/             trilhas, aulas, golpes, socorro e planilhas
+  dados/             trilhas, aulas, golpes, guias de ajuda e planilhas
   componentes/       etiqueta, passos, campo, ícones
   paginas/           uma função por tela
   estilos/           cores, fontes e componentes do moodboard

@@ -47,7 +47,7 @@ export function paginaGolpe(ctx) {
               <li>${icone('link', 24)}<span>Não toque em link estranho.</span></li>
               <li>${icone('pix', 24)}<span>Número novo pedindo Pix? Ligue antes.</span></li>
             </ul>
-            <a class="link-mais" href="#/socorro">Já caiu num golpe? Veja o que fazer ${icone('avancar', 22)}</a>
+            <a class="link-mais" href="#/ajuda">Já caiu num golpe? Peça ajuda ${icone('avancar', 22)}</a>
           </section>`;
       }
       if (fase === 'fim') {

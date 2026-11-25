@@ -13,7 +13,7 @@ let folha = null;
 
 export function definirTelaAtual(t) { tela = t; }
 
-const EXEMPLOS = ['Abrir Formalizar', 'É golpe', 'Vendi 3 calças por 50 reais', 'Letra maior', 'Socorro'];
+const EXEMPLOS = ['Abrir Formalizar', 'É golpe', 'Vendi 3 calças por 50 reais', 'Letra maior', 'Preciso de ajuda', 'O que posso falar'];
 
 function fecharFolha() {
   pararEscuta();
@@ -125,7 +125,7 @@ function executarGeral(acao) {
   const [nome, valor] = acao.split(':');
   if (nome === 'inicio') ir('/inicio');
   if (nome === 'golpe') ir('/golpe');
-  if (nome === 'socorro') ir('/socorro');
+  if (nome === 'ajuda') ir('/ajuda');
   if (nome === 'ajustes') ir('/ajustes');
   if (nome === 'planilhas') ir('/planilhas');
   if (nome === 'preco') ir('/planilhas/preco');
@@ -148,8 +148,8 @@ export function executar(texto) {
     return;
   }
   if (resultado.tipo === 'anotacao') { anotar(resultado.anotacao); return; }
-  if (resultado.tipo === 'geral' && resultado.acao === 'ajuda') {
-    mostrarEstado({ status: 'Comandos que eu entendo', transcricao: COMANDOS_GERAIS.filter((c) => c.acao !== 'ajuda').map((c) => c.rotulo).join(', ') });
+  if (resultado.tipo === 'geral' && resultado.acao === 'comandos') {
+    mostrarEstado({ status: 'Comandos que eu entendo', transcricao: COMANDOS_GERAIS.filter((c) => c.acao !== 'comandos').map((c) => c.rotulo).join(', ') });
     return;
   }
   fecharFolha();

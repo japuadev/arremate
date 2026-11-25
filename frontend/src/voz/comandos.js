@@ -117,7 +117,8 @@ function lerAnotacao(t) {
 export const COMANDOS_GERAIS = [
   { acao: 'inicio', rotulo: 'Início', frases: ['inicio', 'tela inicial', 'comeco', 'aprender', 'minhas trilhas', 'trilhas'] },
   { acao: 'golpe', rotulo: 'É golpe?', frases: ['e golpe', 'golpe', 'treinar golpe', 'simulador de golpe'] },
-  { acao: 'socorro', rotulo: 'Socorro', frases: ['socorro', 'preciso de ajuda', 'urgente'] },
+  // "ajuda" abre a tela Ajuda. "socorro" continua como sinônimo, para quem já aprendeu assim.
+  { acao: 'ajuda', rotulo: 'Ajuda', frases: ['ajuda', 'preciso de ajuda', 'me ajuda', 'tela de ajuda', 'socorro', 'urgente'] },
   { acao: 'voltar', rotulo: 'Voltar', frases: ['voltar', 'volta', 'tela anterior'] },
   { acao: 'ouvir', rotulo: 'Ouvir', frases: ['ouvir', 'leia', 'ler a tela', 'repetir', 'repete', 'fala de novo'] },
   { acao: 'parar', rotulo: 'Parar', frases: ['parar', 'pare', 'silencio', 'chega'] },
@@ -131,7 +132,8 @@ export const COMANDOS_GERAIS = [
   { acao: 'trilha:proteger', rotulo: 'Me proteger', frases: ['proteger', 'me proteger', 'seguranca'] },
   { acao: 'letra:mais', rotulo: 'Aumentar letra', frases: ['aumentar letra', 'letra maior', 'aumenta a letra'] },
   { acao: 'letra:menos', rotulo: 'Diminuir letra', frases: ['diminuir letra', 'letra menor', 'diminui a letra'] },
-  { acao: 'ajuda', rotulo: 'O que posso falar', frases: ['o que posso falar', 'comandos', 'ajuda'] },
+  // A lista de comandos responde só a estas frases: "ajuda" é da tela Ajuda.
+  { acao: 'comandos', rotulo: 'O que posso falar', frases: ['o que posso falar', 'comandos'] },
 ];
 
 // A tela atual tem prioridade: em "É golpe?", dizer "é golpe" responde à pergunta em vez de abrir o menu.
