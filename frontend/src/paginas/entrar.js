@@ -23,7 +23,7 @@ export function paginaEntrar(ctx) {
       <form class="pilha" data-form novalidate>
         ${campo({ id: 'telefone', rotulo: 'Seu celular com DDD', valor: telefoneDigitado, tipo: 'tel', modo: 'numeric', erro, comVoz: true, maximo: 15 })}
         <button class="botao botao-principal" type="submit">Receber código</button>
-        <p class="nota-baixa">Sem e-mail e sem senha. Mandamos um código para o seu celular.</p>
+        <p class="nota-baixa">Sem senha: mandamos um código por SMS.</p>
       </form>`,
     montar(raiz) {
       ligarDitado(raiz, digitosFalados);

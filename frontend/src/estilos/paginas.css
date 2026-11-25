@@ -22,7 +22,8 @@
 .ordem li { counter-increment: o; display: flex; align-items: center; gap: .7rem; font-weight: 700; font-size: 1.05rem; }
 .ordem li::before { content: counter(o) "."; font-family: var(--fonte-titulo); width: 1.4rem; }
 
-.trilha-cabeca { display: flex; gap: .8rem; align-items: center; }
+.trilha-destaque { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: .6rem .8rem; padding: 1rem; background: var(--bege); border-left: .45rem solid var(--ouro); border-radius: .9rem; }
+.trilha-progresso { grid-column: 1 / -1; font-weight: 700; color: var(--indigo-escuro); }
 
 /* A trilha "costurada": fio ouro ligando botões de roupa */
 .costura { display: flex; flex-direction: column; }
@@ -146,3 +147,58 @@
 .material-gratis { padding: 0 .45rem; border-radius: .4rem; background: #E6F0EA; color: #1E4A35; font-weight: 700; }
 .material-abrir { display: inline-flex; align-items: center; gap: .3rem; align-self: flex-end; font-weight: 700; color: var(--indigo); }
 .link-mais { display: inline-flex; align-items: center; gap: .35rem; min-height: var(--toque); align-self: flex-start; font-weight: 700; color: var(--indigo); }
+
+/* É golpe?: título dentro do destaque e dicas em cartões curtos */
+.painel-titulo { font-size: 1.6rem; color: #fff; }
+.cartoes-dica { display: grid; gap: .5rem; }
+.cartoes-dica li { display: flex; align-items: center; gap: .6rem; padding: .7rem .8rem; background: var(--bege); border-radius: .7rem; font-weight: 700; color: var(--indigo-escuro); }
+
+/* ---------- Tipos de tela ----------
+   Celular é o padrão (uma coluna). As regras abaixo adaptam a celulares pequenos,
+   celular deitado, tablet e computador. Em media query, 1rem = 16px. */
+
+/* Celular pequeno (até 360px de largura) */
+@media (max-width: 22.5rem) {
+  #conteudo { padding: .8rem .75rem 1.5rem; gap: 1rem; }
+  h1 { font-size: 1.5rem; }
+  .painel-mes-valor { font-size: 2rem; }
+  .doca { gap: .4rem; padding: .45rem .5rem; }
+  .aba span { font-size: .85rem; }
+  .atalhos { grid-template-columns: repeat(2, 1fr); }
+  .cartoes-planilha { grid-template-columns: 1fr; }
+  .cartao-planilha { min-height: 0; }
+  .etiqueta-ponto { gap: .6rem; padding: .55rem; }
+  .etiqueta-icone { width: 2.6rem; height: 2.6rem; }
+  .leitura-botoes { grid-template-columns: var(--toque) 1fr var(--toque); }
+  .botao-leitura-parar { grid-column: 1 / -1; }
+}
+
+/* Celular deitado: pouca altura. Rodapé mais baixo e figuras menores. */
+@media (orientation: landscape) and (max-height: 32rem) {
+  .doca { padding: .3rem .6rem; }
+  .doca .botao { min-height: 2.6rem; padding: .3rem .8rem; }
+  .aba { flex-direction: row; gap: .4rem; min-height: 2.6rem; }
+  .topo { padding: .1rem .6rem; }
+  .tela-celular { height: min(62vh, 20rem); width: auto; }
+  .passo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+  .aviso { bottom: 7rem; }
+}
+
+/* Tablet e computador: coluna mais larga e cartões lado a lado. */
+@media (min-width: 48rem) {
+  :root { --largura: 46rem; }
+  #conteudo { padding: 1.5rem 2rem 2.5rem; gap: 1.5rem; }
+  .grade-cartoes { grid-template-columns: repeat(2, 1fr); }
+  .cartoes-planilha { grid-template-columns: repeat(4, 1fr); }
+  .cartoes-dica { grid-template-columns: repeat(3, 1fr); }
+  .cartoes-dica li { flex-direction: column; text-align: center; }
+  .passo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 1.5rem; }
+  .baixar-excel { grid-template-columns: auto 1fr auto; align-items: center; }
+  .baixar-excel .botao { grid-column: auto; width: auto; }
+}
+
+/* Computador com tela grande */
+@media (min-width: 64rem) {
+  :root { --largura: 52rem; }
+  .categorias { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem 1.5rem; }
+}

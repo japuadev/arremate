@@ -4,7 +4,7 @@ import { MODELOS, SITUACOES, CATEGORIAS, PRECO_INICIAL, nomeCategoria, categoria
 import { estado, salvarPlanilha, salvarCalculo } from '../app/estado.js';
 import { visao, mesAtual, mesDaData, nomeDoMes, porCategoria, resumoDoMes, somarMes, calcularPreco, lerData } from '../app/financas.js';
 import { baixarControle } from '../app/exportar.js';
-import { campo, blocoMateriais } from '../componentes/comuns.js';
+import { campo, blocoMateriais, verMais } from '../componentes/comuns.js';
 import { materialPorId, TIPOS } from '../dados/materiais.js';
 import { ligarDitado } from '../componentes/ditado.js';
 import { icone } from '../componentes/icones.js';
@@ -107,7 +107,7 @@ export function paginaFinancas(ctx) {
           <span class="baixar-excel-icone" aria-hidden="true">${icone('planilha', 34)}</span>
           <div>
             <h2>Levar para o Excel</h2>
-            <p>Um arquivo com resumo do mês, caixa, estoque, pedidos e preço da peça. As contas já vêm prontas.</p>
+            <p>Resumo, caixa, estoque e pedidos, com as contas prontas.</p>
           </div>
           <button class="botao botao-contorno" data-baixar>${icone('baixar')}<span>Baixar planilha</span></button>
         </section>
@@ -304,15 +304,15 @@ export function paginaPreco(ctx) {
   return {
     titulo: 'Preço da peça', voltar: '/planilhas',
     view: () => `<h1 tabindex="-1">Quanto cobrar por peça</h1>
-      <p class="texto-grande">Preço bom paga o material, o trabalho, as contas do mês e ainda sobra.</p>
+      <p>Paga material, trabalho e contas, e ainda sobra.</p>
       <div data-resultado>${resultado()}</div>
       <form class="pilha caderno" data-form novalidate>
         <h2>Seus números</h2>
         ${CAMPOS.map((c) => campo({ id: c.id, rotulo: c.rotulo, valor: mostrar(valores[c.id], c.inteiro), modo: c.inteiro ? 'numeric' : 'decimal', ajuda: c.ajuda })).join('')}
       </form>
-      <p class="nota-baixa">Esta conta é um ponto de partida. Compare com o preço que o mercado paga e, se puder, converse com um contador ou com o Sebrae.</p>
       <button class="botao botao-contorno" data-baixar>${icone('baixar')}<span>Baixar calculadora para o Excel</span></button>
-      ${blocoMateriais(['preco-venda', 'ebook-preco'].map(materialPorId), TIPOS, 'Aprenda a formar o preço')}`,
+      ${verMais(`<p class="nota-baixa">Esta conta é um ponto de partida. Compare com o preço que o mercado paga e, se puder, converse com um contador ou com o Sebrae.</p>
+        ${blocoMateriais(['preco-venda', 'ebook-preco'].map(materialPorId), TIPOS, 'Aprenda a formar o preço')}`, { id: 'preco', rotulo: 'Ver mais' })}`,
     montar(raiz) {
       raiz.querySelector('[data-form]').addEventListener('input', (e) => {
         const v = lerNum(e.target.value);

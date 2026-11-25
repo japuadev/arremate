@@ -49,7 +49,7 @@ export function paginaDiagnostico(ctx) {
     view() {
       if (i === -1) {
         return `${passos(1, PERGUNTAS.length + 1, 'Vamos nos conhecer')}
-          <p class="texto-grande">Sete perguntas rápidas para o app começar pelo que você mais precisa.</p>
+          <p class="texto-grande">Sete perguntas rápidas para começar.</p>
           <form class="pilha" data-nome novalidate>
             ${campo({ id: 'nome', rotulo: 'Como você se chama?', valor: estado.perfil.nome, comVoz: true })}
             ${campo({ id: 'negocio', rotulo: 'Nome do seu negócio (se tiver)', valor: estado.perfil.negocio, comVoz: true })}

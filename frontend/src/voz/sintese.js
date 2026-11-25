@@ -10,7 +10,7 @@ const disponivel = () => 'speechSynthesis' in window;
 const temDestaqueDePalavra = () => typeof Highlight === 'function' && 'highlights' in CSS;
 
 // Fundos escuros pedem a palavra destacada em ouro, não em índigo.
-const FUNDO_ESCURO = '.jeans, .alerta-golpe, .confirmacao, .botao-principal, .mini-tabela th';
+const FUNDO_ESCURO = '.jeans, .alerta-golpe, .confirmacao, .botao-principal, .mini-tabela th, .painel-mes, .resultado-preco';
 
 let ouvinte = () => {};
 let vez = 0; // cada leitura nova invalida a anterior

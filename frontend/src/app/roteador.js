@@ -2,6 +2,7 @@
 // { titulo, voltar, semAbas, semTopo, view(), montar(raiz), voz() }
 import { estado } from './estado.js';
 import { icone } from '../componentes/icones.js';
+import { ligarVerMais } from '../componentes/comuns.js';
 import { ouvirTela, pararFala, aoMudarFala, estadoLeitura, pausarOuContinuar, trechoAnterior, proximoTrecho } from '../voz/sintese.js';
 import { blocosDeLeitura } from '../voz/leitura.js';
 import { abrirEscuta, definirTelaAtual } from '../voz/interface-voz.js';
@@ -151,6 +152,7 @@ export function desenhar({ focar = false } = {}) {
   });
   ligarDoca();
   p.montar?.(raiz.querySelector('#conteudo'));
+  ligarVerMais(raiz.querySelector('#conteudo'));
   definirTelaAtual({ comandos: () => p.voz?.() || [], ler: lerPagina });
   if (focar) raiz.querySelector('h1')?.focus({ preventScroll: true });
   else window.scrollTo(0, y);
