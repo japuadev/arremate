@@ -3,6 +3,7 @@
 // falar (true ou função): a tela espera uma resposta falada. Só aí o botão Falar aparece.
 import { estado } from './estado.js';
 import { icone } from '../componentes/icones.js';
+import { logo } from '../componentes/logo.js';
 import { ligarVerMais } from '../componentes/comuns.js';
 import { redirecionarAntiga } from './utilidades.js';
 import { ouvirTela, pararFala, aoMudarFala, estadoLeitura, pausarOuContinuar, trechoAnterior, proximoTrecho } from '../voz/sintese.js';
@@ -86,7 +87,7 @@ function topo(p) {
   if (p.semTopo) return '';
   const voltar = p.voltar
     ? `<button class="topo-voltar" data-voltar aria-label="Voltar">${icone('voltar')}<span>Voltar</span></button>`
-    : '<span class="topo-marca">Arremate</span>';
+    : `<span class="topo-marca">${logo()}</span>`;
   const ajustes = p.semAjustes ? '' : `<a class="topo-ajustes" href="#/ajustes" aria-label="Ajustes">${icone('ajustes')}<span>Ajustes</span></a>`;
   return `<header class="topo">${voltar}${ajustes}</header>`;
 }

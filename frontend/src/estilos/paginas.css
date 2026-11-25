@@ -1,5 +1,5 @@
 .abertura .jeans-costura { min-height: 15rem; justify-content: flex-end; }
-.marca { font-size: 3.2rem; color: #fff; letter-spacing: -.02em; }
+.marca { font-size: clamp(2rem, 10vw, 2.6rem); color: #fff; letter-spacing: -.02em; }
 .fio { width: 100%; height: 1rem; margin-top: -.35rem; }
 .fio path { fill: none; stroke: var(--ouro); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 11 8; }
 .abertura-texto { font-size: 1.1rem; }

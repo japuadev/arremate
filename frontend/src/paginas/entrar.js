@@ -1,3 +1,4 @@
+import { logo } from '../componentes/logo.js';
 import { icone } from '../componentes/icones.js';
 import { campo } from '../componentes/comuns.js';
 import { ligarDitado } from '../componentes/ditado.js';
@@ -15,7 +16,7 @@ export function paginaEntrar(ctx) {
     view: () => `
       <section class="abertura jeans">
         <div class="jeans-costura">
-          <h1 tabindex="-1" class="marca">Arremate</h1>
+          <h1 tabindex="-1" class="marca">${logo({ clara: true })}</h1>
           <svg class="fio" viewBox="0 0 300 16" aria-hidden="true" preserveAspectRatio="none"><path d="M2 9 C 60 1, 110 15, 160 8 S 260 3, 298 9"/></svg>
           <p class="abertura-texto">Arremate é o ponto que fecha a costura. Aqui, você fecha o que falta no seu negócio.</p>
         </div>
