@@ -9,8 +9,8 @@ Equipe: Fábian Souza, João Apuã de Melo, Luíza Cavalcanti e Vinícius Costa.
 | Pasta | O que tem | Quem cuida |
 | --- | --- | --- |
 | `frontend/` | App em JavaScript, com personalização e comando de voz | Front |
-| `backend/` | API do app | Back |
-| `database/` | Migrações, dados iniciais e modelagem | Banco |
+| `backend/` | API em Java (Spring Boot), com login, perfil, progresso e planilhas | Back |
+| `database/` | Modelagem do banco e explicação das migrations e dos dados de exemplo | Banco |
 | `docs/` | Guia do Git e contrato da API | Todos |
 | `prototipo/` | Protótipo em um único HTML, para abrir com dois cliques | Gerado pelo front |
 
@@ -32,10 +32,25 @@ Outros comandos, dentro de `frontend/`:
 - `npm run build`: gera a versão de produção em `dist/`.
 - `npm run prototipo`: atualiza `prototipo/arremate-prototipo.html`.
 
+## Rodar o back-end
+
+Precisa de um JDK 17 ou mais novo. O Maven vem junto com o projeto.
+
+```powershell
+cd backend
+.\mvnw.cmd spring-boot:run
+```
+
+A API sobe em `http://localhost:8080` e cria o banco sozinha. Para o front usar a API em vez dos dados simulados, crie `frontend/.env` (copie de `.env.example`) com `VITE_API_URL=http://localhost:8080` e reinicie o `npm run dev`.
+
+Para entrar, use o código `1234`. Usuários de exemplo com dados prontos: `81911111111` (Maria) e `81922222222` (José).
+
+Detalhes, rotas e problemas comuns: [backend/README.md](backend/README.md).
+
 ## Para continuar
 
 - [Como subir e trabalhar no Git](docs/COMO_SUBIR_NO_GIT.md)
 - [Contrato entre front e back](docs/CONTRATO_API.md)
 - [Back-end](backend/README.md)
-- [Banco de dados](database/README.md)
+- [Banco de dados](database/README.md) e [modelo do banco](database/modelagem/MODELO.md)
 - [Organização do front](frontend/README.md)
