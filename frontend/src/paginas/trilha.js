@@ -1,14 +1,14 @@
 import { trilhaPorId } from '../dados/trilhas.js';
-import { estado, alternarBaixada } from '../app/estado.js';
+import { estado } from '../app/estado.js';
 import { etiqueta, formaNivel, NIVEIS, blocoMateriais, verMais } from '../componentes/comuns.js';
 import { materiaisDaTrilha, TIPOS } from '../dados/materiais.js';
 import { icone } from '../componentes/icones.js';
-import { aviso, esc, ir } from '../app/utilidades.js';
+import { esc, ir } from '../app/utilidades.js';
 import { comandosDeOpcoes } from '../voz/comandos.js';
 
 // Destaque no topo (trilha e progresso), uma ação principal (continuar a aula da vez),
-// a lista de aulas e, recolhidos em "Ver mais", o filtro de nível, guardar sem internet
-// e os materiais de gestão.
+// a lista de aulas e, recolhidos em "Ver mais", o filtro de nível, o aviso de uso sem internet
+// e os materiais de gestão. (O app inteiro fica guardado no aparelho pelo sw.js.)
 export function paginaTrilha(id, ctx) {
   const trilha = trilhaPorId(id);
   if (!trilha) { ir('/inicio'); return { view: () => '' }; }
@@ -23,7 +23,6 @@ export function paginaTrilha(id, ctx) {
     view() {
       const atual = aulaDaVez();
       const feitas = trilha.aulas.filter(feita).length;
-      const baixada = estado.progresso.baixadas[trilha.id];
       const sugerido = estado.perfil.niveis?.[trilha.id];
       const secundario = `
         <fieldset class="filtro">
@@ -34,7 +33,7 @@ export function paginaTrilha(id, ctx) {
           </div>
           ${sugerido ? `<p class="nota-baixa">Sugestão para você: ${NIVEIS[sugerido].nome}.</p>` : ''}
         </fieldset>
-        <button class="botao botao-contorno" data-baixar>${icone(baixada ? 'check' : 'baixar')}<span>${baixada ? 'Guardada no celular' : 'Guardar para usar sem internet'}</span></button>
+        <p class="nota-baixa">Depois do primeiro acesso, o app funciona sem internet.</p>
         ${blocoMateriais(materiaisDaTrilha(trilha.id).slice(0, 3), TIPOS, 'Materiais de gestão')}`;
       return `
       <section class="trilha-destaque">
@@ -58,10 +57,6 @@ export function paginaTrilha(id, ctx) {
     montar(raiz) {
       raiz.querySelector('[data-continuar]')?.addEventListener('click', () => ir(`/aula/${aulaDaVez().id}`));
       raiz.querySelectorAll('[data-nivel]').forEach((b) => b.addEventListener('click', () => { filtro = Number(b.dataset.nivel); ctx.atualizar(); }));
-      raiz.querySelector('[data-baixar]').addEventListener('click', () => {
-        aviso(alternarBaixada(trilha.id) ? 'Trilha guardada. Funciona sem internet.' : 'Trilha removida do celular.');
-        ctx.atualizar();
-      });
     },
     voz() {
       const atual = aulaDaVez();
