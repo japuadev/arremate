@@ -21,6 +21,11 @@ export function pararEscuta() {
   atual = null;
 }
 
+// Termina a gravação e entrega o que já foi dito (stop), ao contrário de pararEscuta (abort).
+export function terminarEscuta() {
+  try { atual?.stop(); } catch { /* já parado */ }
+}
+
 export function ouvir({ aoParcial, aoFinal, aoErro, aoFim }) {
   pararEscuta();
   if (!vozDisponivel()) {
