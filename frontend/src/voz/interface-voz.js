@@ -5,6 +5,8 @@ import { ouvirTela, pararFala, falar } from './sintese.js';
 import { icone } from '../componentes/icones.js';
 import { esc, ir, aviso, reais } from '../app/utilidades.js';
 import { estado, atualizarPreferencias, salvarPlanilha } from '../app/estado.js';
+import { categoriaPorDescricao, nomeCategoria } from '../dados/modelos.js';
+import { visao, mesAtual } from '../app/financas.js';
 
 let tela = { comandos: () => [], ler: () => '' };
 let folha = null;
@@ -103,10 +105,14 @@ function anotar(a) {
     mostrarEstado({ status: 'Faltou o valor', transcricao: a.descricao, erro: 'Diga também quanto foi. Exemplo: vendi 3 calças por 50 reais.' });
     return;
   }
+  if (a.tipo === 'caixa') {
+    a.linha.categoria = categoriaPorDescricao(a.linha.tipo, a.linha.descricao);
+    visao.mes = mesAtual(); // a anotação é de hoje: mostra o mês atual
+  }
   salvarPlanilha(a.tipo, [...estado.planilhas[a.tipo], { ...a.linha, data: hoje }]);
   fecharFolha();
   let msg;
-  if (a.tipo === 'caixa') msg = `Anotado: ${a.linha.tipo === 'entrou' ? 'entrou' : 'saiu'} ${reais(a.linha.valor)}, ${a.linha.descricao}.`;
+  if (a.tipo === 'caixa') msg = `Anotado: ${a.linha.tipo === 'entrou' ? 'entrou' : 'saiu'} ${reais(a.linha.valor)}, ${a.linha.descricao}, em ${nomeCategoria(a.linha.categoria)}.`;
   if (a.tipo === 'estoque') msg = `Anotado no estoque: ${a.linha.quantidade} ${a.linha.peca}.`;
   if (a.tipo === 'pedidos') msg = `Pedido anotado: ${a.linha.cliente}, ${a.linha.quantidade} ${a.linha.peca}.`;
   if (location.hash === `#/planilhas/${a.tipo}`) window.dispatchEvent(new HashChangeEvent('hashchange'));
@@ -122,6 +128,7 @@ function executarGeral(acao) {
   if (nome === 'socorro') ir('/socorro');
   if (nome === 'ajustes') ir('/ajustes');
   if (nome === 'planilhas') ir('/planilhas');
+  if (nome === 'preco') ir('/planilhas/preco');
   if (nome === 'trilha') ir(`/trilha/${valor}`);
   if (nome === 'voltar') document.querySelector('[data-voltar]')?.click() ?? history.back();
   if (nome === 'ouvir') ouvirTela(tela.ler());

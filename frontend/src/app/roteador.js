@@ -13,7 +13,7 @@ import { paginaTrilha } from '../paginas/trilha.js';
 import { paginaAula } from '../paginas/aula.js';
 import { paginaGolpe } from '../paginas/golpe.js';
 import { paginaSocorro, paginaGuia } from '../paginas/socorro.js';
-import { paginaModelos, paginaPlanilha } from '../paginas/planilhas.js';
+import { paginaFinancas, paginaPlanilha, paginaPreco } from '../paginas/planilhas.js';
 import { paginaSimuladorMei, paginaSimuladorNota } from '../paginas/simuladores.js';
 import { paginaAjustes } from '../paginas/ajustes.js';
 
@@ -27,7 +27,8 @@ const ROTAS = [
   [/^\/golpe$/, paginaGolpe],
   [/^\/socorro$/, paginaSocorro],
   [/^\/socorro\/([\w-]+)$/, paginaGuia],
-  [/^\/planilhas$/, paginaModelos],
+  [/^\/planilhas$/, paginaFinancas],
+  [/^\/planilhas\/preco$/, paginaPreco],
   [/^\/planilhas\/([\w-]+)$/, paginaPlanilha],
   [/^\/simulador\/mei$/, paginaSimuladorMei],
   [/^\/simulador\/nota$/, paginaSimuladorNota],
@@ -35,7 +36,8 @@ const ROTAS = [
 ];
 
 const ABAS = [
-  { rota: '/inicio', nome: 'Aprender', icone: 'inicio', ativa: /^\/(inicio|trilha|planilhas)/ },
+  { rota: '/inicio', nome: 'Aprender', icone: 'inicio', ativa: /^\/(inicio|trilha|materiais)/ },
+  { rota: '/planilhas', nome: 'Caixa', icone: 'dinheiro', ativa: /^\/planilhas/ },
   { rota: '/golpe', nome: 'É golpe?', icone: 'golpe', ativa: /^\/golpe/ },
   { rota: '/socorro', nome: 'Socorro', icone: 'socorro', ativa: /^\/socorro/ },
 ];

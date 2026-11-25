@@ -62,6 +62,14 @@ Cada passo das aulas mostra a tela do celular desenhada, com o dedo indicando on
 
 As peças (`celular`, `toque`, `olheAqui`, `navegador`, `campo`, `linhaLista`, `bolha`, `documento`, `grade`, `telaDeApps`) ficam em `src/componentes/telas.js` e usam uma área de 240 × 320. A `descricao` é lida por leitores de tela. As telas são genéricas, sem marca de banco ou aplicativo, porque cada celular mostra telas um pouco diferentes. Passo sem tela mostra a tabela de exemplo ou o ícone da aula.
 
+## Finanças e Excel
+
+A aba **Caixa** abre o painel do mês (`paginas/planilhas.js`): quanto entrou, saiu e sobrou, comparação com o mês anterior e para onde foi o dinheiro, por categoria. As contas ficam em `app/financas.js` (com testes) e as categorias em `dados/modelos.js`. Na anotação por voz, a categoria é adivinhada pela descrição ("paguei 40 reais de linha" vai para Tecido e aviamento).
+
+O botão **Baixar planilha** gera um `.xlsx` de verdade (`app/exportar.js`), sem biblioteca: `app/xlsx.js` monta o arquivo e o zip. O arquivo tem as abas Resumo, Caixa, Estoque, Pedidos e Preço da peça, com fórmulas, listas de escolha e cores. Abre no Excel, no Google Planilhas e no LibreOffice.
+
+A calculadora **Preço da peça** fica só no aparelho (`estado.calculos`), não vai para a API.
+
 ## Links das aulas
 
 Os endereços ficam em `src/dados/links.js`. Cada passo aceita `links: [...]` e cada aula aceita `saibaMais: [...]`, em `src/dados/trilhas.js`.
