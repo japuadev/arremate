@@ -30,6 +30,7 @@ function fluxo(ctx, { titulo, voltarPara, etapas, concluir }) {
 
   return {
     titulo, semAbas: true,
+    falar: () => !final() && Boolean(ativa().opcoes), // escolher uma opção falando
     voltar: () => { if (n > 0 && !final()) { n -= 1; erro = ''; ctx.atualizar(); } else ir(voltarPara); },
     view() {
       if (final()) return concluir(dados);

@@ -77,11 +77,20 @@ function listaCategorias(titulo, itens, tipo) {
   </section>`;
 }
 
+// Frases de exemplo que aparecem ao tocar em Falar nas planilhas.
+const EXEMPLOS_ANOTAR = {
+  caixa: ['Vendi 3 calças por 50 reais', 'Comprei linha por 20 reais', 'Paguei a energia de 90 reais'],
+  estoque: ['Costurei 20 calças', 'Chegaram 10 camisas'],
+  pedidos: ['Pedido da Maria 10 calças', 'Encomenda do João 5 shorts'],
+};
+
 // ---------- Painel de finanças ----------
 
 export function paginaFinancas(ctx) {
   return {
     titulo: 'Meu caixa',
+    falar: true, // anotar por voz
+    exemplosVoz: () => ['Vendi 3 calças por 50 reais', 'Comprei linha por 20 reais', 'Costurei 20 calças', 'Mês passado'],
     view() {
       const caixa = estado.planilhas.caixa;
       const r = resumoDoMes(caixa, visao.mes);
@@ -196,6 +205,8 @@ export function paginaPlanilha(id, ctx) {
 
   return {
     titulo: m.nome, voltar: '/planilhas',
+    falar: true, // anotar por voz
+    exemplosVoz: () => EXEMPLOS_ANOTAR[m.id] ?? [],
     view() {
       const l = linhas();
       let lista;

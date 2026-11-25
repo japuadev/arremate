@@ -1,5 +1,5 @@
 // A folha que aparece ao tocar em "Falar", mais a execução dos comandos.
-import { interpretar, COMANDOS_GERAIS } from './comandos.js';
+import { interpretar } from './comandos.js';
 import { ouvir, pararEscuta, terminarEscuta, vozDisponivel } from './reconhecimento.js';
 import { ouvirTela, pararFala, falar } from './sintese.js';
 import { icone } from '../componentes/icones.js';
@@ -8,7 +8,7 @@ import { estado, atualizarPreferencias, salvarPlanilha } from '../app/estado.js'
 import { categoriaPorDescricao, nomeCategoria } from '../dados/modelos.js';
 import { visao, mesAtual } from '../app/financas.js';
 
-let tela = { comandos: () => [], ler: () => '' };
+let tela = { comandos: () => [], exemplos: () => [], ler: () => '' };
 let folha = null;
 let cronometro = null;
 
@@ -28,7 +28,6 @@ function iniciarCronometro() {
 
 export function definirTelaAtual(t) { tela = t; }
 
-const EXEMPLOS = ['Abrir Formalizar', 'É golpe', 'Vendi 3 calças por 50 reais', 'Letra maior', 'Preciso de ajuda', 'O que posso falar'];
 
 function fecharFolha() {
   pararEscuta();
@@ -70,6 +69,7 @@ export function abrirEscuta() {
   if (folha) { fecharFolha(); return; }
   folha = document.createElement('div');
   folha.className = 'folha-fundo';
+  const exemplos = tela.exemplos().slice(0, 6);
   const avisoVoz = estado.preferencias.avisoVozVisto ? '' : '<p class="folha-privacidade">Para virar texto, sua voz passa pelo serviço do Google. Não fale senhas nem números de cartão.</p>';
   if (!estado.preferencias.avisoVozVisto) atualizarPreferencias({ avisoVozVisto: true });
   folha.innerHTML = `
@@ -82,10 +82,10 @@ export function abrirEscuta() {
       <button class="botao botao-gravando" data-terminei hidden>${icone('mic')}<span>Terminei de falar</span></button>
       <p class="alerta-campo" data-erro hidden>${icone('alerta', 24)}<span></span></p>
       ${avisoVoz}
-      <div class="folha-exemplos">
-        <p>Você pode dizer:</p>
-        <div class="folha-chips">${EXEMPLOS.map((x) => `<button class="chip" data-exemplo="${esc(x)}">${esc(x)}</button>`).join('')}</div>
-      </div>
+      ${exemplos.length ? `<div class="folha-exemplos">
+        <p>Nesta tela, você pode dizer:</p>
+        <div class="folha-chips">${exemplos.map((x) => `<button class="chip" data-exemplo="${esc(x)}">${esc(x)}</button>`).join('')}</div>
+      </div>` : ''}
       <form class="folha-digitar" data-digitar>
         <label for="comando-digitado">Ou digite o comando</label>
         <div class="linha-campo">
@@ -178,7 +178,7 @@ export function executar(texto) {
   }
   if (resultado.tipo === 'anotacao') { anotar(resultado.anotacao); return; }
   if (resultado.tipo === 'geral' && resultado.acao === 'comandos') {
-    mostrarEstado({ status: 'Comandos que eu entendo', transcricao: COMANDOS_GERAIS.filter((c) => c.acao !== 'comandos').map((c) => c.rotulo).join(', ') });
+    mostrarEstado({ status: 'Nesta tela, você pode dizer', transcricao: tela.exemplos().join(', ') });
     return;
   }
   fecharFolha();

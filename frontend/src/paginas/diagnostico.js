@@ -45,6 +45,7 @@ export function paginaDiagnostico(ctx) {
 
   return {
     titulo: 'Diagnóstico', semAbas: true, semAjustes: true,
+    falar: () => i >= 0 && i < PERGUNTAS.length, // responder as perguntas falando
     get voltar() { return i < 0 ? undefined : () => { i -= 1; ctx.atualizar(); }; },
     view() {
       if (i === -1) {

@@ -67,6 +67,7 @@ export function paginaAula(id, ctx) {
 
   return {
     titulo: aula.titulo, semAbas: true,
+    falar: () => !fim() && Boolean(aula.passos[n]?.pergunta) && resposta === null, // responder a pergunta falando
     voltar: () => { if (n > 0 && !fim()) { n -= 1; resposta = null; ctx.atualizar(); } else ir(voltarTrilha); },
     view() {
       if (fim()) return entrega();

@@ -156,10 +156,14 @@ tr.em-leitura { outline-offset: 0; }
 ::highlight(palavra-lida) { background-color: var(--indigo); color: #fff; }
 ::highlight(palavra-lida-escuro) { background-color: var(--ouro); color: var(--tinta); }
 
-.doca-leitura { grid-template-columns: 1fr; gap: .4rem; background: var(--marca-texto); }
+.doca-leitura { position: relative; grid-template-columns: 2fr 1fr; gap: .5rem; background: var(--marca-texto); }
+.doca-leitura .botao-leitura-parar:only-of-type { grid-column: 1 / -1; }
+.leitura-progresso { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: rgba(31, 58, 115, .15); }
+.leitura-progresso span { display: block; height: 100%; background: var(--indigo); transition: width .3s; }
+.so-leitor { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .leitura-status { display: flex; align-items: center; gap: .55rem; font-weight: 700; color: var(--indigo-escuro); }
 .leitura-ondas { display: inline-flex; align-items: center; gap: 3px; height: 1.1em; }
-.leitura-ondas i { width: 4px; height: 100%; border-radius: 2px; background: var(--indigo); animation: onda .9s ease-in-out infinite; }
+.leitura-ondas i { width: 4px; height: 100%; border-radius: 2px; background: currentColor; animation: onda .9s ease-in-out infinite; }
 .leitura-ondas i:nth-child(2) { animation-delay: .15s; }
 .leitura-ondas i:nth-child(3) { animation-delay: .3s; }
 .leitura-ondas i:nth-child(4) { animation-delay: .45s; }

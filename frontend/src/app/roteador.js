@@ -1,5 +1,6 @@
 // Roteador por "#/caminho". Cada tela é uma função que devolve um objeto:
-// { titulo, voltar, semAbas, semTopo, view(), montar(raiz), voz() }
+// { titulo, voltar, semAbas, semTopo, view(), montar(raiz), voz(), falar, exemplosVoz() }
+// falar (true ou função): a tela espera uma resposta falada. Só aí o botão Falar aparece.
 import { estado } from './estado.js';
 import { icone } from '../componentes/icones.js';
 import { ligarVerMais } from '../componentes/comuns.js';
@@ -98,29 +99,37 @@ function abas(p) {
   }).join('')}</nav>`;
 }
 
-// Fora da leitura: Ouvir e Falar. Durante a leitura: a barra de controle, como nos leitores de tela.
+// O botão Falar só aparece quando a tela espera uma resposta falada e tem comandos para ela.
+// Nas outras telas, a voz fica nos microfones ao lado dos campos.
+export function telaPedeVoz(p) {
+  if (!p?.falar) return false;
+  const pede = typeof p.falar === 'function' ? p.falar() : p.falar;
+  return Boolean(pede) && (p.voz?.() || []).length > 0;
+}
+
+// Fora da leitura: Ouvir (e Falar, quando a tela pede). Durante a leitura: a barra de controle.
 function doca() {
   const l = estadoLeitura();
   if (!l.ativo) {
-    return `<div class="doca">
+    const falar = telaPedeVoz(paginaAtual);
+    return `<div class="doca ${falar ? '' : 'doca-uma'}">
       <button class="botao botao-ouvir" data-ouvir>${icone('ouvir')}<span>Ouvir</span></button>
-      <button class="botao botao-falar" data-falar>${icone('mic')}<span>Falar</span></button>
+      ${falar ? `<button class="botao botao-falar" data-falar>${icone('mic')}<span>Falar</span></button>` : ''}
     </div>`;
   }
+  // Barra enxuta: uma barrinha de progresso, Pausar/Continuar e Parar.
+  // O "trecho X de Y" fica só para leitor de tela; anterior/próximo saíram para não sobrecarregar.
   const status = l.total
     ? `${l.pausado ? 'Leitura pausada' : 'Lendo'}: trecho ${l.atual} de ${l.total}`
     : 'Lendo em voz alta';
+  const progresso = l.total ? Math.round((l.atual / l.total) * 100) : 0;
   return `<div class="doca doca-leitura" role="group" aria-label="Controle da leitura">
-    <p class="leitura-status" aria-live="polite">
-      <span class="leitura-ondas ${l.pausado ? 'leitura-ondas-paradas' : ''}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-      <span>${status}</span>
-    </p>
-    <div class="leitura-botoes">
-      ${l.total ? `<button class="botao-leitura" data-leitura="anterior" aria-label="Trecho anterior" ${l.atual <= 1 ? 'disabled' : ''}>${icone('anterior', 26)}</button>
-      <button class="botao-leitura botao-leitura-principal" data-leitura="pausar">${icone(l.pausado ? 'continuar' : 'pausar', 26)}<span>${l.pausado ? 'Continuar' : 'Pausar'}</span></button>
-      <button class="botao-leitura" data-leitura="proximo" aria-label="Próximo trecho">${icone('proximo', 26)}</button>` : ''}
-      <button class="botao-leitura botao-leitura-parar" data-leitura="parar">${icone('parar', 22)}<span>Parar</span></button>
-    </div>
+    ${l.total ? `<div class="leitura-progresso" aria-hidden="true"><span style="width:${progresso}%"></span></div>` : ''}
+    <p class="so-leitor" aria-live="polite">${status}</p>
+    ${l.total ? `<button class="botao-leitura botao-leitura-principal" data-leitura="pausar">
+      ${l.pausado ? icone('continuar', 26) : `<span class="leitura-ondas" aria-hidden="true"><i></i><i></i><i></i><i></i></span>`}
+      <span>${l.pausado ? 'Continuar' : 'Pausar'}</span></button>` : ''}
+    <button class="botao-leitura botao-leitura-parar" data-leitura="parar">${icone('parar', 22)}<span>Parar</span></button>
   </div>`;
 }
 
@@ -155,7 +164,7 @@ export function desenhar({ focar = false } = {}) {
   ligarDoca();
   p.montar?.(raiz.querySelector('#conteudo'));
   ligarVerMais(raiz.querySelector('#conteudo'));
-  definirTelaAtual({ comandos: () => p.voz?.() || [], ler: lerPagina });
+  definirTelaAtual({ comandos: () => p.voz?.() || [], exemplos: () => p.exemplosVoz?.() || (p.voz?.() || []).map((c) => c.rotulo), ler: lerPagina });
   if (focar) raiz.querySelector('h1')?.focus({ preventScroll: true });
   else window.scrollTo(0, y);
   const marca = `${rotaAtual}|${raiz.querySelector('.passos-texto')?.textContent}|${raiz.querySelector('h1')?.textContent}`;

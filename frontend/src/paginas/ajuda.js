@@ -172,6 +172,7 @@ export function paginaAjuda(ctx) {
 
   return {
     titulo: 'Ajuda',
+    falar: () => fase === 'resposta', // "repetir", "próximo", "não entendi"
     get voltar() {
       if (fase === 'resposta' && n > 0) return () => irPara(n - 1);
       if (fase === 'inicio' || fase === 'pensando') return undefined;

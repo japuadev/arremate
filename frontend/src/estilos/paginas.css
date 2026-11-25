@@ -169,8 +169,6 @@
   .cartao-planilha { min-height: 0; }
   .etiqueta-ponto { gap: .6rem; padding: .55rem; }
   .etiqueta-icone { width: 2.6rem; height: 2.6rem; }
-  .leitura-botoes { grid-template-columns: var(--toque) 1fr var(--toque); }
-  .botao-leitura-parar { grid-column: 1 / -1; }
 }
 
 /* Celular deitado: pouca altura. Rodapé mais baixo e figuras menores. */

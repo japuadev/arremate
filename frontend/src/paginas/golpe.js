@@ -28,6 +28,7 @@ export function paginaGolpe(ctx) {
 
   return {
     titulo: 'É golpe?',
+    falar: () => fase === 'jogo' && resposta === null, // dizer "é golpe" ou "não é golpe"
     get voltar() { return fase === 'inicio' ? undefined : () => { fase = 'inicio'; ctx.atualizar(); }; },
     view() {
       if (fase === 'inicio') {
