@@ -32,10 +32,15 @@ export function etiqueta({ href, cor, icone: ic, titulo, tempo, nivel, feita = f
   </a>`;
 }
 
+// Contador "Passo N de M" com uma trilha de segmentos: feitos, atual e que faltam.
 export function passos(atual, total, titulo = '') {
+  const segmentos = Array.from({ length: total }, (_, i) => {
+    const classe = i + 1 < atual ? 'feito' : i + 1 === atual ? 'atual' : '';
+    return `<li class="${classe}"></li>`;
+  }).join('');
   return `<div class="passos">
     <p class="passos-texto">Passo ${atual} de ${total}</p>
-    <div class="passos-barra" role="progressbar" aria-valuemin="1" aria-valuemax="${total}" aria-valuenow="${atual}"><span style="width:${(atual / total) * 100}%"></span></div>
+    <ol class="passos-trilha" aria-hidden="true">${segmentos}</ol>
     ${titulo ? `<h1 tabindex="-1" class="titulo-passo">${esc(titulo)}</h1>` : ''}
   </div>`;
 }

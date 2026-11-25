@@ -29,7 +29,9 @@ export function t(texto) {
     cliente: tipo.cliente,
     clientes: tipo.clientes,
   };
-  return String(texto).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+  const pronto = String(texto).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+  // "{cliente} mandou..." vira "A confecção que te contrata mandou...".
+  return /^\{/.test(texto) ? pronto.charAt(0).toUpperCase() + pronto.slice(1) : pronto;
 }
 
 // Quanto maior a nota, mais a pessoa precisa daquela trilha. Em empate vale a ordem da lista.

@@ -46,18 +46,21 @@ Comando de uma tela: devolva-o no método `voz()` da página.
 voz: () => [{ rotulo: 'Continuar', frases: ['continuar', 'proximo'], fazer: avancar }],
 ```
 
-## Vídeos das aulas
+## Telas do passo a passo
 
-O espaço aparece no primeiro passo de cada aula. Para colocar um vídeo definitivo, edite `src/dados/videos.js` usando o id da aula:
+Cada passo das aulas mostra a tela do celular desenhada, com o dedo indicando onde tocar e uma moldura tracejada no que precisa ser conferido. As telas ficam em `src/dados/telas.js`, com a chave `<id da aula>-<número do passo>`:
 
 ```js
-export const VIDEOS = {
-  f2: 'https://www.youtube.com/watch?v=CODIGO',   // YouTube
-  o1: './videos/excel-basico.mp4',                // arquivo em public/videos/
-};
+'d1-2': () => ({
+  descricao: 'Tela de confirmação do Pix com o nome de quem vai receber marcado.',
+  svg: `${cabecalho('Confirme o Pix')}
+    ${texto(30, 178, t('Maria das Graças Silva'), { tam: 13.5, peso: 700 })}
+    ${olheAqui(22, 145, 196, 60)}
+    ${botao(40, 236, 160, 'Confirmar')}`,
+}),
 ```
 
-O campo "Cole o link do vídeo" serve para testar: guarda o link só naquele aparelho. Antes de publicar, troque `PERMITIR_COLAR_VIDEO` para `false`. O player do YouTube só funciona em `localhost` ou `https://`; no protótipo aberto com dois cliques, a capa leva ao YouTube.
+As peças (`celular`, `toque`, `olheAqui`, `navegador`, `campo`, `linhaLista`, `bolha`, `documento`, `grade`, `telaDeApps`) ficam em `src/componentes/telas.js` e usam uma área de 240 × 320. A `descricao` é lida por leitores de tela. As telas são genéricas, sem marca de banco ou aplicativo, porque cada celular mostra telas um pouco diferentes. Passo sem tela mostra a tabela de exemplo ou o ícone da aula.
 
 ## Links das aulas
 
