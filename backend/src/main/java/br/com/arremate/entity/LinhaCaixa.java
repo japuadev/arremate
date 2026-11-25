@@ -33,16 +33,20 @@ public class LinhaCaixa {
 
     private LocalDate data;
 
+    // Opcional: "venda", "material", "contas"... (ver PlanilhaService)
+    private String categoria;
+
     protected LinhaCaixa() {
     }
 
-    public LinhaCaixa(Long usuarioId, int posicao, String tipo, String descricao, BigDecimal valor, LocalDate data) {
+    public LinhaCaixa(Long usuarioId, int posicao, String tipo, String descricao, BigDecimal valor, LocalDate data, String categoria) {
         this.usuarioId = usuarioId;
         this.posicao = posicao;
         this.tipo = tipo;
         this.descricao = descricao;
         this.valor = valor;
         this.data = data;
+        this.categoria = categoria;
     }
 
     public Long getId() {
@@ -71,5 +75,9 @@ public class LinhaCaixa {
 
     public LocalDate getData() {
         return data;
+    }
+
+    public String getCategoria() {
+        return categoria;
     }
 }

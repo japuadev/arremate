@@ -21,6 +21,7 @@ Ver [modelagem/MODELO.md](modelagem/MODELO.md) para o diagrama entidade-relacion
 | `V2__criar_tabelas_perfil.sql` | Perfil | `perfil`, `perfil_trilha` |
 | `V3__criar_tabelas_progresso.sql` | Progresso | `aula_concluida`, `treino_golpe`, `trilha_baixada` |
 | `V4__criar_tabelas_planilhas.sql` | Planilhas | `linha_estoque`, `linha_caixa`, `linha_pedido` |
+| `V5__categoria_no_caixa.sql` | Categoria das linhas do caixa | coluna `categoria` em `linha_caixa` |
 
 Regras do Flyway:
 

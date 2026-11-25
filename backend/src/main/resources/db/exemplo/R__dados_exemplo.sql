@@ -42,10 +42,10 @@ SELECT id, 0, 'calça jeans', 40, DATE '2026-11-18' FROM usuario WHERE telefone 
 SELECT id, 1, 'bermuda jeans', 15, DATE '2026-11-18' FROM usuario WHERE telefone = '81911111111' UNION ALL
 SELECT id, 2, 'short jeans', 0, DATE '2026-11-20' FROM usuario WHERE telefone = '81911111111';
 
-INSERT INTO linha_caixa (usuario_id, posicao, tipo, descricao, valor, data)
-SELECT id, 0, 'entrou', '10 calças para a loja do Zé', 250.00, DATE '2026-11-18' FROM usuario WHERE telefone = '81911111111' UNION ALL
-SELECT id, 1, 'saiu', 'linha e aviamentos', 38.50, DATE '2026-11-19' FROM usuario WHERE telefone = '81911111111' UNION ALL
-SELECT id, 2, 'entrou', 'costura de 20 bermudas', 180.00, DATE '2026-11-21' FROM usuario WHERE telefone = '81911111111';
+INSERT INTO linha_caixa (usuario_id, posicao, tipo, descricao, valor, data, categoria)
+SELECT id, 0, 'entrou', '10 calças para a loja do Zé', 250.00, DATE '2026-11-18', 'venda' FROM usuario WHERE telefone = '81911111111' UNION ALL
+SELECT id, 1, 'saiu', 'linha e aviamentos', 38.50, DATE '2026-11-19', 'material' FROM usuario WHERE telefone = '81911111111' UNION ALL
+SELECT id, 2, 'entrou', 'costura de 20 bermudas', 180.00, DATE '2026-11-21', 'servico' FROM usuario WHERE telefone = '81911111111';
 
 INSERT INTO linha_pedido (usuario_id, posicao, cliente, peca, quantidade, situacao, data)
 SELECT id, 0, 'Loja Moda Caruaru', 'calça jeans', 30, 'A fazer', DATE '2026-11-22' FROM usuario WHERE telefone = '81911111111' UNION ALL
@@ -68,5 +68,5 @@ SELECT id, 'proteger', 3, 3 FROM usuario WHERE telefone = '81922222222';
 INSERT INTO aula_concluida (usuario_id, aula_id, concluida_em)
 SELECT id, 'd1', TIMESTAMP '2026-11-23 19:00:00' FROM usuario WHERE telefone = '81922222222';
 
-INSERT INTO linha_caixa (usuario_id, posicao, tipo, descricao, valor, data)
-SELECT id, 0, 'entrou', 'venda de 15 camisas na feira', 225.00, DATE '2026-11-23' FROM usuario WHERE telefone = '81922222222';
+INSERT INTO linha_caixa (usuario_id, posicao, tipo, descricao, valor, data, categoria)
+SELECT id, 0, 'entrou', 'venda de 15 camisas na feira', 225.00, DATE '2026-11-23', 'venda' FROM usuario WHERE telefone = '81922222222';
