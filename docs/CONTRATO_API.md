@@ -50,6 +50,12 @@ Qualquer rota protegida sem token, ou com token inválido: `401` com `{ "erro": 
 
 `tipo`: `faccao`, `confeccao` ou `vendas`. `peca`: `jeans`, `camisas`, `intima`, `infantil` ou `outras`.
 
+O corpo substitui o perfil inteiro. `nome` e `negocio` podem ir vazios (até 100 letras), `trilhas` pode ir `null` enquanto o diagnóstico não termina, e `niveis` pode ir `{}`. Trilhas aceitas: `organizar`, `formalizar`, `dinheiro` e `proteger`, sem repetir. Níveis vão de 1 a 3.
+
+Erros (`400`): `tipo_invalido`, `peca_invalida`, `trilha_invalida`, `nivel_invalido`, `nome_invalido`, `negocio_invalido`.
+
+`GET /perfil`: `200` com o mesmo formato do corpo acima. Se o usuário ainda não tem perfil: `404` com `{ "erro": "perfil_nao_encontrado" }`.
+
 ## Progresso
 
 `PUT /progresso`
