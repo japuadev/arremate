@@ -136,3 +136,13 @@
 .conta-preco div { display: flex; justify-content: space-between; padding: .2rem 0; border-bottom: 1px dashed rgba(255, 255, 255, .3); }
 .conta-preco dd { margin: 0; font-weight: 700; }
 .conta-preco .conta-total { font-weight: 700; color: #F5D88A; }
+
+/* Materiais de gestão */
+.material { display: flex; flex-direction: column; gap: .3rem; padding: .9rem 1rem; background: #fff; border: 2px solid var(--indigo); border-left-width: .5rem; border-radius: .8rem; color: var(--tinta); text-decoration: none; }
+.material-tipo { display: inline-flex; align-items: center; gap: .35rem; font-size: .92rem; font-weight: 700; color: var(--indigo); }
+.material-titulo { font-family: var(--fonte-titulo); font-size: 1.1rem; line-height: 1.25; }
+.material-resumo { color: var(--tinta-suave); }
+.material-meta { display: flex; flex-wrap: wrap; gap: .3rem .8rem; font-size: .95rem; color: var(--tinta-suave); }
+.material-gratis { padding: 0 .45rem; border-radius: .4rem; background: #E6F0EA; color: #1E4A35; font-weight: 700; }
+.material-abrir { display: inline-flex; align-items: center; gap: .3rem; align-self: flex-end; font-weight: 700; color: var(--indigo); }
+.link-mais { display: inline-flex; align-items: center; gap: .35rem; min-height: var(--toque); align-self: flex-start; font-weight: 700; color: var(--indigo); }

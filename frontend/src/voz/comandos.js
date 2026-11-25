@@ -123,6 +123,7 @@ export const COMANDOS_GERAIS = [
   { acao: 'parar', rotulo: 'Parar', frases: ['parar', 'pare', 'silencio', 'chega'] },
   { acao: 'ajustes', rotulo: 'Ajustes', frases: ['ajustes', 'configuracoes', 'meu perfil'] },
   { acao: 'planilhas', rotulo: 'Meu caixa', frases: ['planilhas', 'minhas planilhas', 'abrir planilha', 'meu caixa', 'meu dinheiro', 'dinheiro do mes', 'financas', 'quanto sobrou', 'quanto entrou', 'quanto gastei'] },
+  { acao: 'materiais', rotulo: 'Materiais de gestão', frases: ['materiais', 'materiais de gestao', 'cursos', 'cartilhas', 'sebrae'] },
   { acao: 'preco', rotulo: 'Preço da peça', frases: ['preco da peca', 'calcular preco', 'quanto cobrar'] },
   { acao: 'trilha:organizar', rotulo: 'Organizar meu negócio', frases: ['organizar', 'organizar meu negocio'] },
   { acao: 'trilha:formalizar', rotulo: 'Formalizar', frases: ['formalizar', 'abrir mei', 'cnpj', 'mei'] },

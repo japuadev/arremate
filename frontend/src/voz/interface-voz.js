@@ -129,6 +129,7 @@ function executarGeral(acao) {
   if (nome === 'ajustes') ir('/ajustes');
   if (nome === 'planilhas') ir('/planilhas');
   if (nome === 'preco') ir('/planilhas/preco');
+  if (nome === 'materiais') ir('/materiais');
   if (nome === 'trilha') ir(`/trilha/${valor}`);
   if (nome === 'voltar') document.querySelector('[data-voltar]')?.click() ?? history.back();
   if (nome === 'ouvir') ouvirTela(tela.ler());

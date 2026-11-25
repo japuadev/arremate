@@ -4,7 +4,8 @@ import { MODELOS, SITUACOES, CATEGORIAS, PRECO_INICIAL, nomeCategoria, categoria
 import { estado, salvarPlanilha, salvarCalculo } from '../app/estado.js';
 import { visao, mesAtual, mesDaData, nomeDoMes, porCategoria, resumoDoMes, somarMes, calcularPreco, lerData } from '../app/financas.js';
 import { baixarControle } from '../app/exportar.js';
-import { campo } from '../componentes/comuns.js';
+import { campo, blocoMateriais } from '../componentes/comuns.js';
+import { materialPorId, TIPOS } from '../dados/materiais.js';
 import { ligarDitado } from '../componentes/ditado.js';
 import { icone } from '../componentes/icones.js';
 import { aviso, esc, ir, reais } from '../app/utilidades.js';
@@ -109,7 +110,8 @@ export function paginaFinancas(ctx) {
             <p>Um arquivo com resumo do mês, caixa, estoque, pedidos e preço da peça. As contas já vêm prontas.</p>
           </div>
           <button class="botao botao-contorno" data-baixar>${icone('baixar')}<span>Baixar planilha</span></button>
-        </section>`;
+        </section>
+        ${blocoMateriais(['fluxo-caixa', 'planilha-fluxo'].map(materialPorId), TIPOS, 'Aprenda mais sobre o caixa')}`;
     },
     montar(raiz) {
       ligarSeletorMes(raiz, ctx);
@@ -309,7 +311,8 @@ export function paginaPreco(ctx) {
         ${CAMPOS.map((c) => campo({ id: c.id, rotulo: c.rotulo, valor: mostrar(valores[c.id], c.inteiro), modo: c.inteiro ? 'numeric' : 'decimal', ajuda: c.ajuda })).join('')}
       </form>
       <p class="nota-baixa">Esta conta é um ponto de partida. Compare com o preço que o mercado paga e, se puder, converse com um contador ou com o Sebrae.</p>
-      <button class="botao botao-contorno" data-baixar>${icone('baixar')}<span>Baixar calculadora para o Excel</span></button>`,
+      <button class="botao botao-contorno" data-baixar>${icone('baixar')}<span>Baixar calculadora para o Excel</span></button>
+      ${blocoMateriais(['preco-venda', 'ebook-preco'].map(materialPorId), TIPOS, 'Aprenda a formar o preço')}`,
     montar(raiz) {
       raiz.querySelector('[data-form]').addEventListener('input', (e) => {
         const v = lerNum(e.target.value);

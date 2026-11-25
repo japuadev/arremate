@@ -81,3 +81,24 @@ export function blocoLinks(links, titulo = '') {
     ${temBusca ? '<p class="nota-baixa">Na busca, prefira endereços oficiais. Serviços do governo terminam em gov.br.</p>' : ''}
   </section>`;
 }
+
+// Cartão de material de gestão (curso, cartilha, planilha), com o tipo, a fonte e o tempo.
+export function cartaoMaterial(m, tipos) {
+  const tipo = tipos[m.tipo];
+  return `<a class="material" href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">
+    <span class="material-tipo">${icone(tipo.icone, 20)}${esc(tipo.nome)}${m.certificado ? ' com certificado' : ''}</span>
+    <strong class="material-titulo">${esc(m.titulo)}</strong>
+    <span class="material-resumo">${esc(m.resumo)}</span>
+    <span class="material-meta"><span>${esc(m.fonte)}</span><span>${esc(m.tempo)}</span><span class="material-gratis">Grátis</span></span>
+    <span class="material-abrir">Abrir ${icone('externo', 20)}</span>
+  </a>`;
+}
+
+export function blocoMateriais(lista, tipos, titulo = 'Materiais de gestão') {
+  if (!lista.length) return '';
+  return `<section class="pilha">
+    <h2>${esc(titulo)}</h2>
+    ${lista.map((m) => cartaoMaterial(m, tipos)).join('')}
+    <a class="link-mais" href="#/materiais">Ver todos os materiais ${icone('avancar', 22)}</a>
+  </section>`;
+}

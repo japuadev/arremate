@@ -53,6 +53,8 @@ export function paginaInicio() {
         ${lista.map((x, i) => etiqueta({ href: `#/trilha/${x.id}`, cor: x.cor, icone: x.icone, titulo: x.nome, destaque: `${feitasDe(x)} de ${x.aulas.length} aulas${i === 0 ? ', comece por aqui' : ''}` })).join('')}
       </section>
 
+      <a class="linha-atalho" href="#/materiais">${icone('nota', 32)}<span><strong>Materiais de gestão</strong><br>Cursos e cartilhas grátis do Sebrae, Banco Central e gov.br</span></a>
+
       <section class="pilha">
         <h2>Minhas planilhas</h2>
         <div class="atalhos">${Object.values(MODELOS).map((m) => `<a class="atalho" href="#/planilhas/${m.id}">${icone(m.icone, 32)}<span>${m.nome}</span></a>`).join('')}</div>

@@ -1,5 +1,5 @@
 // Divide a tela em trechos, na ordem em que aparecem, para ler e destacar um de cada vez.
-const TRECHOS = 'h1, h2, p, li, tr, legend, label, .etiqueta, .opcao, .alerta-golpe, .retorno, .mensagem, .revisao > div, .link-util, .resumo, .atalho, .linha-atalho, .confirmacao';
+const TRECHOS = 'h1, h2, p, li, tr, legend, label, .etiqueta, .opcao, .alerta-golpe, .retorno, .mensagem, .revisao > div, .link-util, .resumo, .atalho, .linha-atalho, .confirmacao, .material, .cartao-planilha, .conta-preco > div';
 
 export function blocosDeLeitura(raiz) {
   if (!raiz) return [];

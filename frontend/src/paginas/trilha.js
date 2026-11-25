@@ -1,6 +1,7 @@
 import { trilhaPorId } from '../dados/trilhas.js';
 import { estado, alternarBaixada } from '../app/estado.js';
-import { etiqueta, formaNivel, NIVEIS } from '../componentes/comuns.js';
+import { etiqueta, formaNivel, NIVEIS, blocoMateriais } from '../componentes/comuns.js';
+import { materiaisDaTrilha, TIPOS } from '../dados/materiais.js';
 import { icone } from '../componentes/icones.js';
 import { aviso, esc, ir } from '../app/utilidades.js';
 import { comandosDeOpcoes } from '../voz/comandos.js';
@@ -41,7 +42,8 @@ export function paginaTrilha(id, ctx) {
           </li>`;
         }).join('') || '<li class="nota-baixa">Nenhuma aula neste nível. Escolha outro.</li>'}
       </ol>
-      <button class="botao botao-contorno" data-baixar>${icone(baixada ? 'check' : 'baixar')}<span>${baixada ? 'Trilha guardada no celular' : 'Guardar para usar sem internet'}</span></button>`;
+      <button class="botao botao-contorno" data-baixar>${icone(baixada ? 'check' : 'baixar')}<span>${baixada ? 'Trilha guardada no celular' : 'Guardar para usar sem internet'}</span></button>
+      ${blocoMateriais(materiaisDaTrilha(trilha.id).slice(0, 3), TIPOS, 'Para ir além: materiais de gestão')}`;
     },
     montar(raiz) {
       raiz.querySelectorAll('[data-nivel]').forEach((b) => b.addEventListener('click', () => { filtro = Number(b.dataset.nivel); ctx.atualizar(); }));

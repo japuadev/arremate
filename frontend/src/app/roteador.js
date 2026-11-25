@@ -16,6 +16,7 @@ import { paginaSocorro, paginaGuia } from '../paginas/socorro.js';
 import { paginaFinancas, paginaPlanilha, paginaPreco } from '../paginas/planilhas.js';
 import { paginaSimuladorMei, paginaSimuladorNota } from '../paginas/simuladores.js';
 import { paginaAjustes } from '../paginas/ajustes.js';
+import { paginaMateriais } from '../paginas/materiais.js';
 
 const ROTAS = [
   [/^\/entrar$/, paginaEntrar],
@@ -33,6 +34,7 @@ const ROTAS = [
   [/^\/simulador\/mei$/, paginaSimuladorMei],
   [/^\/simulador\/nota$/, paginaSimuladorNota],
   [/^\/ajustes$/, paginaAjustes],
+  [/^\/materiais$/, paginaMateriais],
 ];
 
 const ABAS = [

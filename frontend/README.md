@@ -74,6 +74,10 @@ A calculadora **Preço da peça** fica só no aparelho (`estado.calculos`), não
 
 Os endereços ficam em `src/dados/links.js`. Cada passo aceita `links: [...]` e cada aula aceita `saibaMais: [...]`, em `src/dados/trilhas.js`.
 
+## Materiais de gestão
+
+Cursos, cartilhas, planilhas e capacitações grátis (Sebrae, Banco Central, Febraban, gov.br e NTCPE) ficam em `src/dados/materiais.js`. Cada material diz em que trilhas aparece (`trilhas`) e em que assunto da página **Materiais de gestão** entra (`temas`). Eles aparecem no fim de cada trilha, no fim das aulas, no painel do caixa e na calculadora de preço. Os endereços foram conferidos em novembro de 2026; revise antes de cada entrega.
+
 ## Personalização
 
 - O diagnóstico inicial define a ordem das trilhas, o nível sugerido e se o app lê as telas sozinho.
