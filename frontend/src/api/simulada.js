@@ -8,7 +8,12 @@ export const apiSimulada = {
     if (codigo !== '1234') throw new Error('codigo_invalido');
     return { telefone, token: 'token-simulado' };
   },
+  async sair() { return null; },
   async salvarPerfil() { return { ok: true }; },
   async salvarProgresso() { return { ok: true }; },
   async salvarPlanilha() { return { ok: true }; },
+  // Sem servidor não há nada para recuperar: null mantém o que está no aparelho.
+  async buscarPerfil() { return null; },
+  async buscarProgresso() { return null; },
+  async buscarPlanilha() { return null; },
 };

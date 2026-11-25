@@ -106,4 +106,8 @@ Erros (`400`): `linhas_invalidas`, `linha_invalida`, `planilha_muito_grande`, `p
 
 ## Recuperar os dados
 
-`GET /perfil`, `GET /progresso` e `GET /planilhas/:id` já existem no back-end. Falta o front chamá-los ao entrar, para recuperar os dados em outro aparelho.
+Logo depois de `POST /auth/confirmar`, o front chama `GET /perfil`, `GET /progresso` e `GET /planilhas/:id` (as três) e substitui o que estiver no aparelho pelo que vier do servidor. Assim a pessoa encontra os dados em outro aparelho ou depois de sair. Perfil `404` significa usuário novo, que segue para o diagnóstico.
+
+Ao tocar em "Sair", o front chama `POST /auth/sair` e limpa o aparelho. Se qualquer rota responder `401 nao_autenticado`, o front limpa o aparelho e volta para a tela de entrar.
+
+Ficam só no aparelho, sem rota na API: preferências (tamanho da letra, voz) e endereços de vídeo das aulas.

@@ -44,6 +44,27 @@ export function iniciarSessao(sessao) {
   guardar();
 }
 
+// Chamado logo depois de entrar: traz do servidor o que a pessoa já tinha salvo,
+// inclusive de outro aparelho. O que vier do servidor vale; o que vier null
+// (nada salvo, sem internet ou API simulada) mantém o que está no aparelho.
+export async function carregarDados() {
+  const buscar = (promessa) => promessa.catch(() => null);
+  const [perfil, progresso, estoque, caixa, pedidos] = await Promise.all([
+    buscar(api.buscarPerfil()),
+    buscar(api.buscarProgresso()),
+    buscar(api.buscarPlanilha('estoque')),
+    buscar(api.buscarPlanilha('caixa')),
+    buscar(api.buscarPlanilha('pedidos')),
+  ]);
+  const base = inicial();
+  if (perfil) estado.perfil = { ...base.perfil, ...perfil };
+  if (progresso) estado.progresso = { ...base.progresso, ...progresso };
+  if (estoque) estado.planilhas.estoque = estoque;
+  if (caixa) estado.planilhas.caixa = caixa;
+  if (pedidos) estado.planilhas.pedidos = pedidos;
+  guardar();
+}
+
 export function atualizarPerfil(dados) {
   Object.assign(estado.perfil, dados);
   guardar();
@@ -72,6 +93,7 @@ export function registrarGolpe(acertos, total) {
 export function alternarBaixada(trilhaId) {
   estado.progresso.baixadas[trilhaId] = !estado.progresso.baixadas[trilhaId];
   guardar();
+  sincronizar(api.salvarProgresso(estado.progresso));
   return estado.progresso.baixadas[trilhaId];
 }
 
@@ -86,7 +108,15 @@ export function salvarVideo(aulaId, endereco) {
   guardar();
 }
 
+// Encerra a sessão no servidor e limpa o aparelho.
+// O pedido ao servidor sai com o token antes de ele ser apagado logo abaixo.
 export function sair() {
+  sincronizar(api.sair());
+  limparAparelho();
+}
+
+// Só limpa o aparelho. Usado quando o servidor já não reconhece o token.
+export function limparAparelho() {
   try { localStorage.removeItem(CHAVE); } catch { /* idem */ }
   Object.assign(estado, inicial());
   aplicarPreferencias();

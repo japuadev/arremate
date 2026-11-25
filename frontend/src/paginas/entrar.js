@@ -3,7 +3,7 @@ import { campo } from '../componentes/comuns.js';
 import { ligarDitado } from '../componentes/ditado.js';
 import { digitosFalados } from '../voz/comandos.js';
 import { esc, ir, soDigitos } from '../app/utilidades.js';
-import { iniciarSessao, estado } from '../app/estado.js';
+import { iniciarSessao, carregarDados, estado } from '../app/estado.js';
 import { api } from '../api/index.js';
 
 let telefoneDigitado = '';
@@ -65,13 +65,18 @@ export function paginaCodigo(ctx) {
       raiz.querySelector('[data-form]').addEventListener('submit', async (e) => {
         e.preventDefault();
         const codigo = soDigitos(raiz.querySelector('#codigo').value);
+        let sessao;
         try {
-          iniciarSessao(await api.confirmarCodigo(telefoneDigitado, codigo));
-          ir(estado.perfil.diagnosticoFeito ? '/inicio' : '/diagnostico');
+          sessao = await api.confirmarCodigo(telefoneDigitado, codigo);
         } catch {
           erro = 'Código errado. Confira os 4 números e tente de novo.';
           ctx.atualizar();
+          return;
         }
+        iniciarSessao(sessao);
+        // Traz o que a pessoa já tinha salvo. Quem já fez o diagnóstico vai direto para o início.
+        await carregarDados();
+        ir(estado.perfil.diagnosticoFeito ? '/inicio' : '/diagnostico');
       });
     },
   };
