@@ -23,3 +23,6 @@ export function aviso(texto, tipo = 'ok') {
 export function soDigitos(texto) {
   return String(texto ?? '').replace(/\D/g, '');
 }
+
+// A tela "Socorro" virou "Ajuda". Links antigos (#/socorro e #/socorro/<guia>) continuam funcionando.
+export const redirecionarAntiga = (rota) => rota.replace(/^\/socorro(?=\/|$)/, '/ajuda');

@@ -6,9 +6,10 @@ import { estado } from '../app/estado.js';
 export const SESSAO_EXPIRADA = 'arremate:sessao-expirada';
 
 export function apiHttp(base) {
-  async function chamar(metodo, caminho, corpo) {
+  async function chamar(metodo, caminho, corpo, sinal) {
     const resposta = await fetch(`${base}${caminho}`, {
       method: metodo,
+      signal: sinal,
       headers: {
         'Content-Type': 'application/json',
         ...(estado.sessao?.token ? { Authorization: `Bearer ${estado.sessao.token}` } : {}),
@@ -30,6 +31,10 @@ export function apiHttp(base) {
     salvarPerfil: (perfil) => chamar('PUT', '/perfil', perfil),
     salvarProgresso: (progresso) => chamar('PUT', '/progresso', progresso),
     salvarPlanilha: (id, linhas) => chamar('PUT', `/planilhas/${id}`, { linhas }),
+
+    // IA da tela Ajuda. A chave fica no servidor; daqui só sai o texto, já mascarado.
+    perguntarAjuda: (texto, sinal) => chamar('POST', '/ajuda/perguntar', { texto }, sinal),
+    outroJeitoAjuda: (texto, passo, sinal) => chamar('POST', '/ajuda/outro-jeito', { texto, passo }, sinal),
 
     // Leitura, usada ao entrar. null = nada salvo no servidor.
     buscarPerfil: () => chamar('GET', '/perfil').catch((e) => {

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { normalizar, numerosEmDigitos, digitosFalados, interpretar, interpretarAnotacao, comandosDeOpcoes } from '../src/voz/comandos.js';
+import { redirecionarAntiga } from '../src/app/utilidades.js';
 
 test('normaliza acento e pontuação', () => assert.equal(normalizar('É Golpe?!'), 'e golpe'));
 test('normaliza valor em R$', () => assert.equal(normalizar('R$ 50,90'), '50.90 reais'));
@@ -11,8 +12,26 @@ test('números por extenso', () => {
 });
 test('comando geral', () => {
   assert.equal(interpretar('abrir formalizar').acao, 'trilha:formalizar');
-  assert.equal(interpretar('Socorro!').acao, 'socorro');
   assert.equal(interpretar('letra maior').acao, 'letra:mais');
+});
+test('"ajuda" abre a tela Ajuda', () => {
+  assert.equal(interpretar('Ajuda').acao, 'ajuda');
+  assert.equal(interpretar('Preciso de ajuda!').acao, 'ajuda');
+  assert.equal(interpretar('me ajuda aqui').acao, 'ajuda');
+  assert.equal(interpretar('Socorro!').acao, 'ajuda'); // sinônimo antigo
+  assert.equal(interpretar('é urgente').acao, 'ajuda');
+});
+test('lista de comandos só com "o que posso falar" e "comandos"', () => {
+  assert.equal(interpretar('O que posso falar?').acao, 'comandos');
+  assert.equal(interpretar('comandos').acao, 'comandos');
+  assert.equal(interpretar('quais são os comandos').acao, 'comandos');
+  assert.notEqual(interpretar('ajuda').acao, 'comandos');
+});
+test('links antigos de Socorro vão para Ajuda', () => {
+  assert.equal(redirecionarAntiga('/socorro'), '/ajuda');
+  assert.equal(redirecionarAntiga('/socorro/pix'), '/ajuda/pix');
+  assert.equal(redirecionarAntiga('/socorrooo'), '/socorrooo');
+  assert.equal(redirecionarAntiga('/inicio'), '/inicio');
 });
 test('frase desconhecida devolve nulo', () => assert.equal(interpretar('qual a previsao do tempo'), null));
 test('tela tem prioridade e a frase mais longa vence', () => {

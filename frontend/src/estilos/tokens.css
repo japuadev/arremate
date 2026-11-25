@@ -12,6 +12,8 @@
   --tinta: #1B2238;
   --tinta-suave: #4A5168;
   --alerta: #8B1A1A;
+  --gravando: #C62828; /* microfone ligado: vermelho de "gravando", como nos gravadores */
+  --gravando-fundo: #FDECEC;
   --marca-texto: #FFF1C9;
 
   --trilha-organizar: var(--indigo);

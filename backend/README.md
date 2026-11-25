@@ -50,6 +50,29 @@ Tudo em `src/main/resources/application.properties`:
 | `spring.h2.console.enabled` | `true` | console do banco em `/h2-console` |
 | `arremate.cors.origens` | `http://localhost:5173` | endereços do front liberados (separe vários com vírgula) |
 | `arremate.auth.codigo-fixo` | `1234` | código que sempre funciona; deixe vazio para aceitar só o sorteado |
+| `arremate.ia.chave` | variável `GEMINI_API_KEY` | chave do Gemini para a tela Ajuda; vazia = o front usa a IA simulada |
+| `arremate.ia.modelo` | variável `GEMINI_MODELO` ou `gemini-3.5-flash-lite` | modelo do Gemini; troque se o Google aposentar o modelo |
+| `arremate.ia.tempo-limite-segundos` | `15` | quanto esperar o Google responder |
+| `arremate.ia.pedidos-por-hora` | `30` | pedidos à IA por pessoa, a cada hora |
+
+### IA da tela Ajuda
+
+A tela Ajuda do app usa o Gemini por meio de `POST /ajuda/perguntar` e `POST /ajuda/outro-jeito` (formato em [`docs/CONTRATO_API.md`](../docs/CONTRATO_API.md#ajuda-ia)). A chave fica só aqui no servidor, numa variável de ambiente, e nunca vai para o navegador nem para o Git.
+
+1. Crie uma chave grátis em [aistudio.google.com/apikey](https://aistudio.google.com/apikey), com a conta Google da equipe.
+2. Antes de subir a API, defina a variável no mesmo terminal:
+
+   ```powershell
+   $env:GEMINI_API_KEY = 'cole-a-chave-aqui'
+   .\mvnw.cmd spring-boot:run
+   ```
+
+   No Linux ou Mac: `GEMINI_API_KEY=cole-a-chave-aqui ./mvnw spring-boot:run`. Em hospedagem (Render, Railway etc.), cadastre `GEMINI_API_KEY` nas variáveis de ambiente do serviço.
+3. Opcional: `GEMINI_MODELO` troca o modelo.
+
+Sem a variável, as rotas respondem `503 ia_nao_configurada` e o front passa a usar a versão simulada, com respostas fixas. Nada quebra.
+
+O que o servidor faz em cada pedido: confere o texto (até 1000 letras), troca por `••••` números longos e senhas (`MascaraDadosSensiveis`), conta o limite por pessoa (`LimiteDePedidos`) e manda ao Gemini as instruções (`InstrucoesAjuda`) separadas do texto da pessoa, que vai entre `<relato>` e `</relato>`. O registro guarda só o status de erro do Google, nunca o texto da pessoa.
 
 ## Rotas
 
@@ -67,6 +90,8 @@ Corpo sempre em JSON. Rotas protegidas exigem `Authorization: Bearer <token>`, r
 | GET / PUT | `/planilhas/estoque` | sim | lê / grava a planilha de estoque |
 | GET / PUT | `/planilhas/caixa` | sim | lê / grava a planilha de caixa |
 | GET / PUT | `/planilhas/pedidos` | sim | lê / grava a planilha de pedidos |
+| POST | `/ajuda/perguntar` | sim | manda o problema à IA e devolve os passos |
+| POST | `/ajuda/outro-jeito` | sim | explica de outro jeito um passo ("Não entendi") |
 
 ### Erros
 
@@ -78,6 +103,10 @@ Todo erro devolve o status HTTP e `{ "erro": "codigo" }`:
 | 401 | código errado, ou rota protegida sem token válido | `codigo_invalido`, `nao_autenticado` |
 | 404 | rota inexistente ou perfil ainda não criado | `rota_nao_encontrada`, `perfil_nao_encontrado` |
 | 405 | método errado na rota | `metodo_nao_permitido` |
+| 429 | muitos pedidos à IA | `limite_pedidos`, `ia_limite` |
+| 502 | a IA falhou ou não devolveu JSON | `ia_indisponivel`, `ia_formato` |
+| 503 | servidor sem `GEMINI_API_KEY` | `ia_nao_configurada` |
+| 504 | a IA demorou mais que o limite | `ia_tempo_esgotado` |
 | 500 | erro inesperado (detalhes no console da API) | `erro_servidor` |
 
 ## Organização do código

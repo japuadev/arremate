@@ -32,11 +32,23 @@ export function paginaGolpe(ctx) {
     view() {
       if (fase === 'inicio') {
         const { melhor, total } = estado.progresso.golpe;
-        return `<h1 tabindex="-1">É golpe ou não é?</h1>
-          ${alertaGolpe('Pare!', 'Banco não pede senha por mensagem.')}
-          <p class="texto-grande">Treine com ${MENSAGENS.length} mensagens parecidas com as que chegam no seu celular. Aqui, nada é de verdade.</p>
-          ${total ? `<p class="placar">${icone('tesoura')}<span>Seu melhor resultado: ${melhor} de ${total}</span></p>` : ''}
-          <button class="botao botao-principal" data-comecar>Começar treino</button>`;
+        // Destaque no topo (o treino e o placar), uma ação principal e dicas em cartões curtos.
+        return `<section class="painel-mes">
+            <p class="painel-mes-rotulo">Treino com ${MENSAGENS.length} mensagens</p>
+            <h1 tabindex="-1" class="painel-titulo">É golpe ou não é?</h1>
+            <p class="painel-mes-comparacao">${total ? `Seu melhor: ${melhor} de ${total} certas` : 'Aqui, nada é de verdade.'}</p>
+          </section>
+          <button class="botao botao-principal" data-comecar>Começar treino</button>
+          <section class="pilha">
+            <h2>Lembre sempre</h2>
+            ${alertaGolpe('Pare!', 'Banco não pede senha por mensagem.')}
+            <ul class="cartoes-dica">
+              <li>${icone('relogio', 24)}<span>Pressa é sinal de golpe.</span></li>
+              <li>${icone('link', 24)}<span>Não toque em link estranho.</span></li>
+              <li>${icone('pix', 24)}<span>Número novo pedindo Pix? Ligue antes.</span></li>
+            </ul>
+            <a class="link-mais" href="#/ajuda">Já caiu num golpe? Peça ajuda ${icone('avancar', 22)}</a>
+          </section>`;
       }
       if (fase === 'fim') {
         const bom = acertos >= MENSAGENS.length - 1;
@@ -55,8 +67,8 @@ export function paginaGolpe(ctx) {
           <p class="mensagem-balao">${esc(m.texto)}</p>
         </article>
         ${resposta === null ? `<div class="duplo">
-          <button class="botao botao-golpe" data-r="1">${icone('alerta')}<span>É golpe</span></button>
-          <button class="botao botao-seguro" data-r="0">${icone('check')}<span>Não é golpe</span></button>
+          <button class="botao botao-resposta botao-golpe" data-r="1">${icone('alerta')}<span>É golpe</span></button>
+          <button class="botao botao-resposta botao-seguro" data-r="0">${icone('check')}<span>Não é golpe</span></button>
         </div>` : `
         <div class="retorno ${certa ? 'retorno-certo' : 'retorno-errado'}" role="status">${icone(certa ? 'check' : 'alerta', 26)}<span><strong>${certa ? 'Acertou.' : 'Não foi dessa vez.'}</strong> ${m.golpe ? 'Isso é golpe.' : 'Essa mensagem é segura.'}</span></div>
         <ul class="sinais">${m.sinais.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>

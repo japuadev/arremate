@@ -1,5 +1,5 @@
 import { estado, atualizarPerfil, atualizarPreferencias, sair } from '../app/estado.js';
-import { campo } from '../componentes/comuns.js';
+import { campo, verMais } from '../componentes/comuns.js';
 import { ligarDitado } from '../componentes/ditado.js';
 import { TIPOS, PECAS } from '../personalizacao/perfil.js';
 import { falar } from '../voz/sintese.js';
@@ -19,18 +19,20 @@ export function paginaAjustes(ctx) {
     view() {
       const p = estado.perfil;
       const q = estado.preferencias;
+      // Destaque no topo (tamanho da letra, o ajuste mais usado), cartões curtos para voz e
+      // negócio, uma ação principal (Salvar) e as opções da conta recolhidas no fim.
       return `<h1 tabindex="-1">Ajustes</h1>
-      <section class="pilha">
+      <section class="cartao-destaque pilha">
         <h2>Tamanho da letra</h2>${grupoBotoes('escala', TAMANHOS, q.escala)}
       </section>
-      <section class="pilha">
+      <section class="cartao pilha">
         <h2>Voz</h2>
         <p class="rotulo-solto">Velocidade da leitura</p>${grupoBotoes('velocidade', VELOCIDADES, q.velocidade)}
         <label class="alternar"><input type="checkbox" data-sozinho ${q.lerSozinho ? 'checked' : ''}/> <span>Ler cada tela automaticamente</span></label>
         <button class="botao botao-contorno" data-testar>Testar a voz</button>
-        <p class="nota-baixa">${vozDisponivel() ? 'Para virar texto, sua voz passa pelo serviço do Google. Não fale senhas nem números de cartão.' : 'Comando de voz indisponível neste navegador. Use o Chrome.'}</p>
+        <p class="nota-baixa">${vozDisponivel() ? 'A voz passa pelo Google. Não fale senhas.' : 'Voz indisponível aqui. Use o Chrome.'}</p>
       </section>
-      <form class="pilha" data-form>
+      <form class="cartao pilha" data-form>
         <h2>Meu negócio</h2>
         ${campo({ id: 'nome', rotulo: 'Seu nome', valor: p.nome, comVoz: true })}
         ${campo({ id: 'negocio', rotulo: 'Nome do negócio', valor: p.negocio, comVoz: true })}
@@ -38,10 +40,8 @@ export function paginaAjustes(ctx) {
         ${selecao('peca', 'O que você mais faz', PECAS, p.peca)}
         <button class="botao botao-principal" type="submit">Salvar mudanças</button>
       </form>
-      <section class="pilha">
-        <button class="botao botao-contorno" data-refazer>Refazer diagnóstico</button>
-        <button class="botao botao-contorno" data-sair>Sair e apagar meus dados</button>
-      </section>`;
+      ${verMais(`<button class="botao botao-contorno" data-refazer>Refazer diagnóstico</button>
+        <button class="botao botao-contorno botao-perigo" data-sair>Sair e apagar meus dados</button>`, { id: 'conta', rotulo: 'Ver mais' })}`;
     },
     montar(raiz) {
       ligarDitado(raiz);

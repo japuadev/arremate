@@ -1,7 +1,7 @@
 import { aulaPorId } from '../dados/trilhas.js';
 import { MODELOS } from '../dados/modelos.js';
 import { concluirAula } from '../app/estado.js';
-import { blocoLinks, passos, cartaoMaterial } from '../componentes/comuns.js';
+import { blocoLinks, passos, cartaoMaterial, verMais } from '../componentes/comuns.js';
 import { materiaisDaTrilha, TIPOS } from '../dados/materiais.js';
 import { telaDoPasso } from '../dados/telas.js';
 import { icone } from '../componentes/icones.js';
@@ -60,9 +60,9 @@ export function paginaAula(id, ctx) {
         <h1 tabindex="-1">Aula arrematada</h1>
       </div>
       <div class="pilha">${corpo}${acao}
-      ${blocoLinks(aula.saibaMais, 'Para saber mais')}
-      ${materiaisDaTrilha(trilha.id).slice(0, 1).map((m) => `<h2>Curso ou cartilha indicada</h2>${cartaoMaterial(m, TIPOS)}`).join('')}
-      ${e.tipo !== 'guia' ? `<a class="botao botao-contorno" href="#${voltarTrilha}">Voltar para a trilha</a>` : ''}</div>`;
+      ${e.tipo !== 'guia' ? `<a class="botao botao-contorno" href="#${voltarTrilha}">Voltar para a trilha</a>` : ''}
+      ${verMais(`${blocoLinks(aula.saibaMais, 'Para saber mais')}
+        ${materiaisDaTrilha(trilha.id).slice(0, 1).map((m) => `<h2>Curso ou cartilha indicada</h2>${cartaoMaterial(m, TIPOS)}`).join('')}`, { id: 'aula-fim', rotulo: 'Ver mais' })}</div>`;
   }
 
   return {

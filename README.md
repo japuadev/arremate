@@ -28,7 +28,7 @@ Abra `http://localhost:5173` no Chrome. No protótipo, o código de acesso é `1
 
 Outros comandos, dentro de `frontend/`:
 
-- `npm test`: testa o interpretador de comandos de voz.
+- `npm test`: testa os comandos de voz, as contas do caixa e a IA da Ajuda (validação e proteção de dados).
 - `npm run build`: gera a versão de produção em `dist/`.
 - `npm run prototipo`: atualiza `prototipo/arremate-prototipo.html`.
 
@@ -46,6 +46,10 @@ A API sobe em `http://localhost:8080` e cria o banco sozinha. Para o front usar 
 Para entrar, use o código `1234`. Usuários de exemplo com dados prontos: `81911111111` (Maria) e `81922222222` (José).
 
 Detalhes, rotas e problemas comuns: [backend/README.md](backend/README.md).
+
+### IA da tela Ajuda
+
+Para a Ajuda usar o Gemini de verdade, defina a variável de ambiente `GEMINI_API_KEY` antes de subir o back-end (passo a passo em [backend/README.md](backend/README.md#ia-da-tela-ajuda)). Sem ela, ou no protótipo, o app usa uma IA simulada com respostas prontas.
 
 ## Para continuar
 

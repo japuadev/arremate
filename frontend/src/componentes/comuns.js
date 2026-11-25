@@ -94,6 +94,27 @@ export function cartaoMaterial(m, tipos) {
   </a>`;
 }
 
+// Conteúdo secundário recolhido atrás de um botão "Ver mais". Fica aberto ou fechado
+// mesmo quando a tela é redesenhada (ex.: ao trocar um filtro dentro dele).
+const abertos = new Set();
+const chaveVerMais = (id) => `${location.hash}|${id}`;
+
+export function verMais(conteudo, { id = 'mais', rotulo = 'Ver mais' } = {}) {
+  if (!conteudo?.trim()) return '';
+  return `<details class="ver-mais" data-ver-mais="${esc(id)}" ${abertos.has(chaveVerMais(id)) ? 'open' : ''}>
+    <summary class="botao botao-contorno">${icone('seta-baixo')}<span class="ver-mais-fechado">${esc(rotulo)}</span><span class="ver-mais-aberto">Ver menos</span></summary>
+    <div class="ver-mais-conteudo pilha">${conteudo}</div>
+  </details>`;
+}
+
+// Chamado pelo roteador depois de desenhar cada tela.
+export function ligarVerMais(raiz) {
+  raiz.querySelectorAll('[data-ver-mais]').forEach((d) => d.addEventListener('toggle', () => {
+    const chave = chaveVerMais(d.dataset.verMais);
+    if (d.open) abertos.add(chave); else abertos.delete(chave);
+  }));
+}
+
 export function blocoMateriais(lista, tipos, titulo = 'Materiais de gestão') {
   if (!lista.length) return '';
   return `<section class="pilha">

@@ -11,7 +11,7 @@ export function paginaMateriais(ctx) {
     view() {
       const lista = tema ? materiaisDoTema(tema) : MATERIAIS;
       return `<h1 tabindex="-1">Materiais de gestão</h1>
-        <p class="texto-grande">Cursos, cartilhas e planilhas grátis para ir além das aulas. Abrem fora do app.</p>
+        <p>Cursos e cartilhas grátis. Abrem fora do app.</p>
         <fieldset class="filtro">
           <legend>Escolha o assunto</legend>
           <div class="filtro-lista">
