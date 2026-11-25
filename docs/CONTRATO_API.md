@@ -68,6 +68,14 @@ Erros (`400`): `tipo_invalido`, `peca_invalida`, `trilha_invalida`, `nivel_inval
 }
 ```
 
+Cada parte enviada (`aulas`, `golpe`, `baixadas`) substitui a anterior; parte omitida fica como está. Itens com `false` contam como não marcados. A data de conclusão de uma aula é a do primeiro envio em que ela apareceu.
+
+Regras: id de aula com letras minúsculas e números (até 10); trilhas de `baixadas` iguais às do perfil; `golpe` com `0 <= melhor <= total <= 100`.
+
+Erros (`400`): `aula_invalida`, `trilha_invalida`, `golpe_invalido`.
+
+`GET /progresso`: `200` com o mesmo formato. Sem nada salvo: `{ "aulas": {}, "golpe": { "melhor": 0, "total": 0 }, "baixadas": {} }`.
+
 ## Planilhas
 
 `PUT /planilhas/:id`, com `id` igual a `estoque`, `caixa` ou `pedidos`. O corpo traz a lista completa.
