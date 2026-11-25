@@ -64,8 +64,9 @@ function navegar() {
   if (`#${rota}` !== location.hash) { location.replace(`#${rota}`); return; }
   pararFala();
   rotaAtual = rota;
+  const caminho = rota.split('?')[0]; // "?simular=..." (demonstração da IA) não faz parte da rota
   for (const [padrao, pagina] of ROTAS) {
-    const achou = rota.match(padrao);
+    const achou = caminho.match(padrao);
     if (achou) {
       paginaAtual = pagina(...achou.slice(1), { atualizar: desenhar });
       desenhar({ focar: true });

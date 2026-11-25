@@ -105,6 +105,54 @@ Erros (`400`): `linhas_invalidas`, `linha_invalida`, `planilha_muito_grande`, `p
 
 `GET /planilhas/:id`: `200` com `{ "linhas": [...] }` no mesmo formato (lista vazia se não houver nada).
 
+## Ajuda (IA)
+
+A tela Ajuda manda o que a pessoa escreveu ou falou e recebe passos curtos. A chave do Gemini fica só no servidor, na variável de ambiente `GEMINI_API_KEY`. As instruções da IA também ficam no servidor (`InstrucoesAjuda.java`), e o texto da pessoa vai separado delas, entre `<relato>` e `</relato>`. Antes de enviar, o front e o servidor trocam por `••••` números longos (CPF, cartão, conta, telefone, códigos) e valores de senha ou código.
+
+`POST /ajuda/perguntar` (com token)
+
+```json
+{ "texto": "Fiz um Pix de 300 reais para um golpista" }
+```
+
+Resposta `200`: o JSON da IA como veio. O front valida antes de mostrar (`frontend/src/ia/validacao.js`).
+
+```json
+{
+  "foraDoEscopo": false,
+  "urgente": true,
+  "passos": [
+    { "texto": "Fale agora com o seu banco e peça o MED: Mecanismo Especial de Devolução.", "tela": { "modelo": "apps", "alvo": "banco" } },
+    "Faça o boletim de ocorrência pela delegacia on-line."
+  ],
+  "dica": "Quanto antes o banco souber, melhor."
+}
+```
+
+Assunto fora do escopo: `{ "foraDoEscopo": true, "mensagem": "..." }`.
+
+Regras conferidas pelo front: de 1 a 5 passos; cada passo é texto ou `{ texto, tela }`, com até 25 palavras; `urgente` é obrigatório; `dica` é opcional. Uma `tela` fora do combinado é descartada e o passo aparece sem figura. Modelos de `tela`: `apps`, `lista`, `aviso`, `conversa` e `campo` (campos em `frontend/src/ia/ilustracao.js`). Em golpe com dinheiro já enviado, o primeiro passo é sempre falar com o banco e pedir o MED; o front garante isso mesmo se a IA esquecer.
+
+`POST /ajuda/outro-jeito` (com token): botão "Não entendi", outra explicação para o mesmo passo.
+
+```json
+{ "texto": "Fiz um Pix de 300 reais para um golpista", "passo": "Peça o MED ao banco." }
+```
+
+Resposta `200`: `{ "texto": "O MED é um pedido para o banco tentar pegar o dinheiro de volta..." }`
+
+Erros:
+
+| Status | Código | Quando | O que o front faz |
+| --- | --- | --- | --- |
+| `400` | `texto_invalido`, `passo_invalido` | texto vazio ou com mais de 1000 letras (passo: 300) | pede para escrever de novo |
+| `429` | `limite_pedidos` | mais de 30 pedidos por pessoa na última hora (`arremate.ia.pedidos-por-hora`) | "Muitos pedidos agora" e guias prontos |
+| `429` | `ia_limite` | a cota da chave no Google acabou | idem |
+| `502` | `ia_indisponivel` | o Google não respondeu ou deu erro | "Tente de novo" e guias prontos |
+| `502` | `ia_formato` | a IA não devolveu JSON | mensagem simples e guias prontos |
+| `503` | `ia_nao_configurada` | servidor sem `GEMINI_API_KEY` | passa a usar a IA simulada, sem avisar a pessoa |
+| `504` | `ia_tempo_esgotado` | o Google passou de 15 segundos | "Demorou demais" e guias prontos |
+
 ## Recuperar os dados
 
 Logo depois de `POST /auth/confirmar`, o front chama `GET /perfil`, `GET /progresso` e `GET /planilhas/:id` (as três) e substitui o que estiver no aparelho pelo que vier do servidor. Assim a pessoa encontra os dados em outro aparelho ou depois de sair. Perfil `404` significa usuário novo, que segue para o diagnóstico.

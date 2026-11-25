@@ -13,7 +13,8 @@ src/
   componentes/       etiqueta, passos, campo, ícones
   paginas/           uma função por tela
   estilos/           cores, fontes e componentes do moodboard
-tests/               testes dos comandos de voz
+  ia/                IA da tela Ajuda (servidor ou simulada), validação e proteção de dados
+tests/               testes dos comandos de voz, das finanças e da IA
 public/              ícone, manifesto e service worker (uso sem internet)
 ```
 
@@ -83,6 +84,31 @@ Cursos, cartilhas, planilhas e capacitações grátis (Sebrae, Banco Central, Fe
 - O diagnóstico inicial define a ordem das trilhas, o nível sugerido e se o app lê as telas sozinho.
 - Nas aulas, `{peca}`, `{pecas}`, `{cliente}` e `{negocio}` mudam conforme o perfil (`personalizacao/perfil.js`).
 - Em Ajustes, a pessoa muda letra, velocidade da voz e dados do negócio.
+
+## Tela Ajuda com IA
+
+Na aba **Ajuda**, a pessoa escreve ou dita (microfone ao lado do campo) o que aconteceu e toca em **Pedir ajuda**. A resposta vem em passos curtos, um por vez, com **Repetir**, **Próximo** e **Não entendi** (outra explicação para o mesmo passo). Quando ajuda, o passo mostra uma tela desenhada com as peças de `componentes/telas.js`. Os guias prontos continuam embaixo, como **Situações comuns**, e são o plano B quando a IA falha.
+
+| Arquivo | Função |
+| --- | --- |
+| `ia/index.js` | escolhe a versão da IA; é o único lugar que sabe qual está ativa |
+| `ia/servico.js` | o que a tela usa: esconde dados, chama a IA com limite de tempo, valida e aplica a regra do MED |
+| `ia/servidor.js` | IA de verdade, pelo back-end (`POST /ajuda/perguntar`) |
+| `ia/simulado.js` | IA simulada: respostas fixas para Pix com golpista, boleto estranho, link ou senha e MEI |
+| `ia/validacao.js` | confere o JSON da IA antes de mostrar |
+| `ia/dadosSensiveis.js` | troca por `••••` CPF, cartão, conta, telefone, senhas e códigos |
+| `ia/regras.js` | em golpe com dinheiro já enviado, o primeiro passo é sempre falar com o banco e pedir o MED |
+| `ia/ilustracao.js` | confere e desenha as telas dos passos (`apps`, `lista`, `aviso`, `conversa`, `campo`) |
+
+Qual versão é usada:
+
+- Sem `VITE_API_URL` (protótipo e demonstração): a simulada.
+- Com `VITE_API_URL`: a do servidor. Se o servidor não tiver a chave `GEMINI_API_KEY`, ele responde `ia_nao_configurada` e o app passa para a simulada sozinho.
+- `?simular=normal` no fim do endereço (ex.: `#/ajuda?simular=normal`) força a simulada, como plano B na apresentação. Para mostrar os erros: `?simular=formato`, `?simular=indisponivel`, `?simular=tempo` ou `?simular=lento`.
+
+A chave da IA nunca fica no navegador: quem fala com o Gemini é o back-end. Veja como configurar em [`backend/README.md`](../backend/README.md#ia-da-tela-ajuda).
+
+`npm run prototipo` usa o arquivo `.env.prototipo`, que deixa `VITE_API_URL` vazio: o HTML único sempre abre com a API e a IA simuladas, mesmo que o `.env` aponte para um servidor.
 
 ## Ligar ao back-end
 
