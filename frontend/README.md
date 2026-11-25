@@ -26,7 +26,7 @@ O app usa a **Web Speech API**. No Chrome, ela envia o áudio ao serviço de rec
 | `voz/reconhecimento.js` | Liga o microfone em `pt-BR` e trata os erros |
 | `voz/comandos.js` | Transforma a frase em ação; é coberto por testes |
 | `voz/interface-voz.js` | Folha "Falar", execução dos comandos e anotações |
-| `voz/sintese.js` | Botão "Ouvir": lê um trecho por vez e escurece o resto da tela |
+| `voz/sintese.js` | Botão "Ouvir": lê um trecho por vez, destaca o trecho e a palavra falada e controla pausa, voltar e pular |
 | `voz/leitura.js` | Define o que conta como trecho de leitura |
 
 Limites importantes:
