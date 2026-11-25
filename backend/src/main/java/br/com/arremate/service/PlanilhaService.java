@@ -29,6 +29,10 @@ public class PlanilhaService {
 
     public static final Set<String> TIPOS_CAIXA = Set.of("entrou", "saiu");
     public static final Set<String> SITUACOES = Set.of("A fazer", "Pronto", "Entregue");
+    // Mesmos ids de frontend/src/dados/modelos.js (CATEGORIAS)
+    public static final Set<String> CATEGORIAS_ENTRADA = Set.of("venda", "servico", "outra-entrada");
+    public static final Set<String> CATEGORIAS_SAIDA = Set.of(
+            "material", "pessoal", "contas", "maquina", "transporte", "impostos", "retirada", "outra-saida");
 
     private static final int MAXIMO_LINHAS = 1000;
     private static final int TAMANHO_MAXIMO_TEXTO = 100;
@@ -92,12 +96,14 @@ public class PlanilhaService {
             if (dto == null) {
                 throw new DadoInvalidoException("linha_invalida");
             }
+            String tipo = validarOpcao(dto.tipo(), TIPOS_CAIXA, "tipo_invalido");
             novas.add(new LinhaCaixa(
                     usuarioId, i,
-                    validarOpcao(dto.tipo(), TIPOS_CAIXA, "tipo_invalido"),
+                    tipo,
                     validarTexto(dto.descricao(), "descricao_invalida"),
                     validarValor(dto.valor()),
-                    validarData(dto.data())
+                    validarData(dto.data()),
+                    validarCategoria(dto.categoria(), tipo)
             ));
         }
         caixaRepository.apagarDoUsuario(usuarioId);
@@ -166,6 +172,15 @@ public class PlanilhaService {
             throw new DadoInvalidoException(codigoErro);
         }
         return valor;
+    }
+
+    // Opcional. Quando vem, precisa combinar com o tipo: "material" só em saída, "venda" só em entrada.
+    private String validarCategoria(String categoria, String tipo) {
+        if (categoria == null || categoria.isBlank()) {
+            return null;
+        }
+        Set<String> aceitas = "entrou".equals(tipo) ? CATEGORIAS_ENTRADA : CATEGORIAS_SAIDA;
+        return validarOpcao(categoria, aceitas, "categoria_invalida");
     }
 
     // Maior que zero; arredonda para centavos (50.555 vira 50.56)

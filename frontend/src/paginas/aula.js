@@ -1,8 +1,9 @@
 import { aulaPorId } from '../dados/trilhas.js';
 import { MODELOS } from '../dados/modelos.js';
 import { concluirAula } from '../app/estado.js';
-import { blocoLinks, passos } from '../componentes/comuns.js';
-import { blocoVideo, ligarVideo } from '../componentes/video.js';
+import { blocoLinks, passos, cartaoMaterial } from '../componentes/comuns.js';
+import { materiaisDaTrilha, TIPOS } from '../dados/materiais.js';
+import { telaDoPasso } from '../dados/telas.js';
 import { icone } from '../componentes/icones.js';
 import { esc, ir } from '../app/utilidades.js';
 import { t } from '../personalizacao/perfil.js';
@@ -32,6 +33,14 @@ export function paginaAula(id, ctx) {
       <tbody>${e.linhas.map((l) => `<tr class="${/^(total|sobrou)$/i.test(l[0]) ? 'linha-total' : ''}">${l.map((c) => `<td>${esc(t(c))}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
   }
 
+  // Cada passo mostra a tela do celular; sem tela, a tabela de exemplo ou o ícone da aula.
+  function figura(p) {
+    const tela = telaDoPasso(aula.id, n + 1);
+    if (tela) return tela;
+    if (p.exemplo) return tabela(p.exemplo);
+    return `<div class="desenho" style="--cor:var(--trilha-${trilha.cor});--cor-icone:var(--trilha-${trilha.cor}-icone)">${icone(aula.icone, 72)}</div>`;
+  }
+
   function entrega() {
     const e = aula.entrega;
     let corpo = '';
@@ -52,6 +61,7 @@ export function paginaAula(id, ctx) {
       </div>
       <div class="pilha">${corpo}${acao}
       ${blocoLinks(aula.saibaMais, 'Para saber mais')}
+      ${materiaisDaTrilha(trilha.id).slice(0, 1).map((m) => `<h2>Curso ou cartilha indicada</h2>${cartaoMaterial(m, TIPOS)}`).join('')}
       ${e.tipo !== 'guia' ? `<a class="botao botao-contorno" href="#${voltarTrilha}">Voltar para a trilha</a>` : ''}</div>`;
   }
 
@@ -75,14 +85,15 @@ export function paginaAula(id, ctx) {
           <button class="botao botao-principal" data-prox>Continuar</button>` : ''}`;
       }
       return `${passos(n + 1, total, t(p.titulo))}
-        <p class="texto-grande">${esc(t(p.texto))}</p>
+        <div class="passo" data-passo>
+          <figure class="passo-figura">${figura(p)}</figure>
+          <p class="passo-texto texto-grande">${esc(t(p.texto))}</p>
+        </div>
         ${blocoLinks(p.links)}
-        ${p.exemplo ? tabela(p.exemplo) : n === 0 ? blocoVideo(aula) : `<div class="desenho" style="--cor:var(--trilha-${trilha.cor});--cor-icone:var(--trilha-${trilha.cor}-icone)">${icone(aula.icone, 72)}</div>`}
-        <button class="botao botao-principal" data-prox>Próximo passo</button>`;
+        <button class="botao botao-principal passo-avancar" data-prox><span>Próximo</span>${icone('avancar')}</button>`;
     },
     montar(raiz) {
       raiz.querySelector('[data-prox]')?.addEventListener('click', avancar);
-      ligarVideo(raiz, ctx.atualizar);
       raiz.querySelectorAll('[data-resp]').forEach((b) => b.addEventListener('click', () => { resposta = Number(b.dataset.resp); ctx.atualizar(); }));
     },
     voz() {

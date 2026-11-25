@@ -86,6 +86,7 @@ erDiagram
         VARCHAR descricao
         DECIMAL valor "10,2 e > 0"
         DATE data
+        VARCHAR categoria "opcional: venda, material, contas..."
     }
     linha_pedido {
         BIGINT id PK
@@ -125,7 +126,7 @@ erDiagram
 | `treino_golpe` | melhor resultado no treino "É golpe?" | V3 |
 | `trilha_baixada` | trilhas guardadas no celular para usar sem internet | V3 |
 | `linha_estoque` | planilha de estoque | V4 |
-| `linha_caixa` | planilha de caixa (entradas e saídas) | V4 |
+| `linha_caixa` | planilha de caixa (entradas e saídas), com categoria opcional | V4, V5 |
 | `linha_pedido` | planilha de pedidos | V4 |
 
 A tabela `flyway_schema_history`, criada pelo próprio Flyway, registra quais migrations já rodaram. Não mexa nela.

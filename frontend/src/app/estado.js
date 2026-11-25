@@ -9,7 +9,7 @@ const inicial = () => ({
   preferencias: { escala: 1, velocidade: 1, lerSozinho: false, avisoVozVisto: false },
   progresso: { aulas: {}, golpe: { melhor: 0, total: 0 }, baixadas: {} },
   planilhas: { estoque: [], caixa: [], pedidos: [] },
-  videos: {},
+  calculos: { preco: null }, // só no aparelho
 });
 
 function carregar() {
@@ -24,7 +24,7 @@ function carregar() {
         preferencias: { ...base.preferencias, ...salvo.preferencias },
         progresso: { ...base.progresso, ...salvo.progresso },
         planilhas: { ...base.planilhas, ...salvo.planilhas },
-        videos: { ...salvo.videos },
+        calculos: { ...base.calculos, ...salvo.calculos },
       };
     }
   } catch { /* aparelho sem armazenamento: segue só na memória */ }
@@ -103,8 +103,8 @@ export function salvarPlanilha(id, linhas) {
   sincronizar(api.salvarPlanilha(id, linhas));
 }
 
-export function salvarVideo(aulaId, endereco) {
-  if (endereco) estado.videos[aulaId] = endereco; else delete estado.videos[aulaId];
+export function salvarCalculo(id, valores) {
+  estado.calculos[id] = valores;
   guardar();
 }
 

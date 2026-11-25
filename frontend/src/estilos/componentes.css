@@ -25,11 +25,27 @@
 
 .forma { fill: var(--indigo); }
 
-.passos { display: flex; flex-direction: column; gap: .45rem; }
-.passos-texto { font-weight: 700; }
-.passos-barra { height: .85rem; border: 1.5px solid var(--tinta); border-radius: 1rem; overflow: hidden; background: #fff; }
-.passos-barra span { display: block; height: 100%; background: var(--indigo); transition: width .3s; }
-.titulo-passo { margin-top: .5rem; font-size: 1.6rem; }
+.passos { display: flex; flex-direction: column; gap: .5rem; }
+.passos-texto { font-weight: 700; color: var(--indigo); }
+.passos-trilha { display: flex; gap: .35rem; }
+.passos-trilha li { flex: 1; height: .6rem; border-radius: .3rem; background: var(--linha); }
+.passos-trilha li.feito { background: var(--indigo); }
+.passos-trilha li.atual { background: var(--ouro); box-shadow: 0 0 0 2px var(--papel), 0 0 0 3.5px var(--tinta); }
+.titulo-passo { margin-top: .4rem; font-size: 1.55rem; }
+
+/* Passo a passo com a tela do celular */
+.passo { display: flex; flex-direction: column; gap: .9rem; }
+.passo-figura { margin: 0; padding: 1rem .8rem .8rem; border-radius: 1rem; background: var(--bege); display: flex; justify-content: center; }
+.passo-figura .mini-tabela { align-self: center; }
+.passo-figura .desenho { margin: .5rem 0; }
+.passo-texto { padding: .2rem 0 .2rem .9rem; border-left: 5px solid var(--ouro); }
+.passo-avancar { margin-top: auto; }
+
+.tela-celular { display: block; width: 100%; max-width: 15rem; height: auto; font-family: var(--fonte-texto); }
+.tela-toque-pulso { fill: none; stroke: var(--ouro); stroke-width: 5; opacity: 0; transform-box: fill-box; transform-origin: center; animation: toque 1.4s ease-out infinite; }
+@keyframes toque { from { transform: scale(1); opacity: .8; } to { transform: scale(1.8); opacity: 0; } }
+.tela-olhe { animation: olhe 1.6s ease-in-out infinite; }
+@keyframes olhe { 50% { stroke-dashoffset: 12; } }
 
 .pilha { display: flex; flex-direction: column; gap: .8rem; }
 .grupo-campo { display: flex; flex-direction: column; gap: .3rem; }
@@ -83,21 +99,34 @@ select.campo { font-size: 1rem; }
 .folha-acoes { display: flex; gap: .5rem; }
 [hidden] { display: none !important; }
 
-/* Leitura em voz alta: o trecho lido fica claro e o resto escurece */
-body.lendo .topo { z-index: 1; }
-.em-leitura { position: relative; z-index: 4; border-radius: .5rem; box-shadow: 0 0 0 4px var(--ouro), 0 0 0 200vmax rgba(14, 24, 54, .74); }
-p.em-leitura, h1.em-leitura, h2.em-leitura, label.em-leitura, legend.em-leitura { background: var(--papel); }
-.jeans p.em-leitura, .jeans h1.em-leitura { background: var(--indigo); }
+/* Leitura em voz alta: a tela continua visível. O trecho lido ganha fundo de marca-texto
+   e a palavra falada fica destacada (CSS Custom Highlight API). */
+.em-leitura { position: relative; z-index: 1; border-radius: .45rem; outline: 3px solid var(--ouro); outline-offset: .3rem; scroll-margin: 6rem 0 12rem; transition: background-color .2s, outline-color .2s; }
+:is(p, h1, h2, li, label, legend, dl > div).em-leitura { background: var(--marca-texto); box-shadow: 0 0 0 .3rem var(--marca-texto); }
+tr.em-leitura td { background: var(--marca-texto); }
+tr.em-leitura { outline-offset: 0; }
+.jeans .em-leitura, .confirmacao .em-leitura { background: transparent; box-shadow: none; }
+
+::highlight(palavra-lida) { background-color: var(--indigo); color: #fff; }
+::highlight(palavra-lida-escuro) { background-color: var(--ouro); color: var(--tinta); }
+
+.doca-leitura { grid-template-columns: 1fr; gap: .4rem; background: var(--marca-texto); }
+.leitura-status { display: flex; align-items: center; gap: .55rem; font-weight: 700; color: var(--indigo-escuro); }
+.leitura-ondas { display: inline-flex; align-items: center; gap: 3px; height: 1.1em; }
+.leitura-ondas i { width: 4px; height: 100%; border-radius: 2px; background: var(--indigo); animation: onda .9s ease-in-out infinite; }
+.leitura-ondas i:nth-child(2) { animation-delay: .15s; }
+.leitura-ondas i:nth-child(3) { animation-delay: .3s; }
+.leitura-ondas i:nth-child(4) { animation-delay: .45s; }
+.leitura-ondas-paradas i { animation: none; transform: scaleY(.35); }
+@keyframes onda { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+.leitura-botoes { display: grid; grid-template-columns: var(--toque) 1fr var(--toque) auto; gap: .45rem; }
+.botao-leitura { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: var(--toque); padding: 0 .7rem; border-radius: .7rem; border: 2px solid var(--indigo); background: #fff; color: var(--indigo); font-weight: 700; font-size: 1.05rem; }
+.botao-leitura:disabled { opacity: .4; cursor: not-allowed; }
+.botao-leitura-principal { background: var(--indigo); color: #fff; }
+.botao-leitura-parar { border-color: var(--tinta); color: var(--tinta); }
 
 .links { display: flex; flex-direction: column; gap: .5rem; }
 .link-util { display: flex; align-items: center; gap: .65rem; min-height: var(--toque); padding: .55rem .7rem; background: #fff; border: 2px solid var(--indigo); border-radius: .7rem; color: var(--indigo-escuro); text-decoration: none; }
 .link-util > span { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .link-util small { font-size: 1rem; color: var(--tinta-suave); }
 
-.video { display: flex; flex-direction: column; gap: .5rem; }
-.video-quadro { position: relative; aspect-ratio: 16 / 9; border-radius: .8rem; overflow: hidden; background: var(--indigo); color: #fff; }
-.video-quadro iframe, .video-quadro video, .video-quadro img { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; }
-.video-capa { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .3rem; padding: 1rem; text-align: center; color: #fff; background: rgba(21, 42, 86, .55); text-decoration: none; font-weight: 700; }
-.video-vazio { background: var(--indigo); border: 2px dashed var(--ouro); border-radius: .8rem; }
-.video-trocar { background: none; border: 0; min-height: var(--toque); color: var(--indigo); font-weight: 700; text-decoration: underline; align-self: flex-start; padding: 0; }
-.video-botao { width: auto; }

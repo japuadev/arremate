@@ -2,7 +2,7 @@
 // { titulo, voltar, semAbas, semTopo, view(), montar(raiz), voz() }
 import { estado } from './estado.js';
 import { icone } from '../componentes/icones.js';
-import { ouvirTela, pararFala, falando, aoMudarFala } from '../voz/sintese.js';
+import { ouvirTela, pararFala, aoMudarFala, estadoLeitura, pausarOuContinuar, trechoAnterior, proximoTrecho } from '../voz/sintese.js';
 import { blocosDeLeitura } from '../voz/leitura.js';
 import { abrirEscuta, definirTelaAtual } from '../voz/interface-voz.js';
 
@@ -13,9 +13,10 @@ import { paginaTrilha } from '../paginas/trilha.js';
 import { paginaAula } from '../paginas/aula.js';
 import { paginaGolpe } from '../paginas/golpe.js';
 import { paginaSocorro, paginaGuia } from '../paginas/socorro.js';
-import { paginaModelos, paginaPlanilha } from '../paginas/planilhas.js';
+import { paginaFinancas, paginaPlanilha, paginaPreco } from '../paginas/planilhas.js';
 import { paginaSimuladorMei, paginaSimuladorNota } from '../paginas/simuladores.js';
 import { paginaAjustes } from '../paginas/ajustes.js';
+import { paginaMateriais } from '../paginas/materiais.js';
 
 const ROTAS = [
   [/^\/entrar$/, paginaEntrar],
@@ -27,15 +28,18 @@ const ROTAS = [
   [/^\/golpe$/, paginaGolpe],
   [/^\/socorro$/, paginaSocorro],
   [/^\/socorro\/([\w-]+)$/, paginaGuia],
-  [/^\/planilhas$/, paginaModelos],
+  [/^\/planilhas$/, paginaFinancas],
+  [/^\/planilhas\/preco$/, paginaPreco],
   [/^\/planilhas\/([\w-]+)$/, paginaPlanilha],
   [/^\/simulador\/mei$/, paginaSimuladorMei],
   [/^\/simulador\/nota$/, paginaSimuladorNota],
   [/^\/ajustes$/, paginaAjustes],
+  [/^\/materiais$/, paginaMateriais],
 ];
 
 const ABAS = [
-  { rota: '/inicio', nome: 'Aprender', icone: 'inicio', ativa: /^\/(inicio|trilha|planilhas)/ },
+  { rota: '/inicio', nome: 'Aprender', icone: 'inicio', ativa: /^\/(inicio|trilha|materiais)/ },
+  { rota: '/planilhas', nome: 'Caixa', icone: 'dinheiro', ativa: /^\/planilhas/ },
   { rota: '/golpe', nome: 'É golpe?', icone: 'golpe', ativa: /^\/golpe/ },
   { rota: '/socorro', nome: 'Socorro', icone: 'socorro', ativa: /^\/socorro/ },
 ];
@@ -91,11 +95,45 @@ function abas(p) {
   }).join('')}</nav>`;
 }
 
+// Fora da leitura: Ouvir e Falar. Durante a leitura: a barra de controle, como nos leitores de tela.
 function doca() {
-  return `<div class="doca">
-    <button class="botao botao-ouvir" data-ouvir>${icone(falando() ? 'parar' : 'ouvir')}<span>${falando() ? 'Parar' : 'Ouvir'}</span></button>
-    <button class="botao botao-falar" data-falar>${icone('mic')}<span>Falar</span></button>
+  const l = estadoLeitura();
+  if (!l.ativo) {
+    return `<div class="doca">
+      <button class="botao botao-ouvir" data-ouvir>${icone('ouvir')}<span>Ouvir</span></button>
+      <button class="botao botao-falar" data-falar>${icone('mic')}<span>Falar</span></button>
+    </div>`;
+  }
+  const status = l.total
+    ? `${l.pausado ? 'Leitura pausada' : 'Lendo'}: trecho ${l.atual} de ${l.total}`
+    : 'Lendo em voz alta';
+  return `<div class="doca doca-leitura" role="group" aria-label="Controle da leitura">
+    <p class="leitura-status" aria-live="polite">
+      <span class="leitura-ondas ${l.pausado ? 'leitura-ondas-paradas' : ''}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>${status}</span>
+    </p>
+    <div class="leitura-botoes">
+      ${l.total ? `<button class="botao-leitura" data-leitura="anterior" aria-label="Trecho anterior" ${l.atual <= 1 ? 'disabled' : ''}>${icone('anterior', 26)}</button>
+      <button class="botao-leitura botao-leitura-principal" data-leitura="pausar">${icone(l.pausado ? 'continuar' : 'pausar', 26)}<span>${l.pausado ? 'Continuar' : 'Pausar'}</span></button>
+      <button class="botao-leitura" data-leitura="proximo" aria-label="Próximo trecho">${icone('proximo', 26)}</button>` : ''}
+      <button class="botao-leitura botao-leitura-parar" data-leitura="parar">${icone('parar', 22)}<span>Parar</span></button>
+    </div>
   </div>`;
+}
+
+const ACOES_LEITURA = { anterior: trechoAnterior, pausar: pausarOuContinuar, proximo: proximoTrecho, parar: pararFala };
+
+// A doca é redesenhada sozinha, sem mexer na página.
+function ligarDoca() {
+  const lugar = raiz.querySelector('[data-doca]');
+  if (!lugar) return;
+  const focado = document.activeElement?.dataset?.leitura;
+  lugar.innerHTML = doca();
+  lugar.querySelector('[data-ouvir]')?.addEventListener('click', () => ouvirTela(lerPagina()));
+  lugar.querySelector('[data-falar]')?.addEventListener('click', abrirEscuta);
+  lugar.querySelectorAll('[data-leitura]').forEach((b) => b.addEventListener('click', () => ACOES_LEITURA[b.dataset.leitura]()));
+  // Mantém o foco no mesmo botão para quem navega por teclado ou leitor de tela.
+  if (focado) lugar.querySelector(`[data-leitura="${focado}"]:not(:disabled)`)?.focus();
 }
 
 export function desenhar({ focar = false } = {}) {
@@ -106,15 +144,12 @@ export function desenhar({ focar = false } = {}) {
     <div class="tela ${p.semAbas ? 'tela-sem-abas' : ''}">
       ${topo(p)}
       <main id="conteudo" tabindex="-1">${p.view()}</main>
-      <div class="rodape">${doca()}${abas(p)}</div>
+      <div class="rodape"><div data-doca></div>${abas(p)}</div>
     </div>`;
   raiz.querySelector('[data-voltar]')?.addEventListener('click', () => {
     if (typeof p.voltar === 'function') p.voltar(); else location.hash = p.voltar;
   });
-  raiz.querySelector('[data-ouvir]').addEventListener('click', () => {
-    if (falando()) pararFala(); else ouvirTela(lerPagina());
-  });
-  raiz.querySelector('[data-falar]').addEventListener('click', abrirEscuta);
+  ligarDoca();
   p.montar?.(raiz.querySelector('#conteudo'));
   definirTelaAtual({ comandos: () => p.voz?.() || [], ler: lerPagina });
   if (focar) raiz.querySelector('h1')?.focus({ preventScroll: true });
@@ -128,9 +163,10 @@ export function desenhar({ focar = false } = {}) {
 export function iniciarRoteador(elemento) {
   raiz = elemento;
   window.addEventListener('hashchange', navegar);
-  aoMudarFala((ativo) => {
-    const b = raiz.querySelector('[data-ouvir]');
-    if (b) b.innerHTML = `${icone(ativo ? 'parar' : 'ouvir')}<span>${ativo ? 'Parar' : 'Ouvir'}</span>`;
+  let antes = '';
+  aoMudarFala((l) => {
+    const agora = JSON.stringify(l);
+    if (agora !== antes) { antes = agora; ligarDoca(); }
   });
   navegar();
 }

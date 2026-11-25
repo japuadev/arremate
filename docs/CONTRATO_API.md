@@ -81,13 +81,13 @@ Erros (`400`): `aula_invalida`, `trilha_invalida`, `golpe_invalido`.
 `PUT /planilhas/:id`, com `id` igual a `estoque`, `caixa` ou `pedidos`. O corpo traz a lista completa.
 
 ```json
-{ "linhas": [{ "tipo": "entrou", "descricao": "3 calças", "valor": 50, "data": "08/11/2026" }] }
+{ "linhas": [{ "tipo": "entrou", "descricao": "3 calças", "valor": 50, "data": "08/11/2026", "categoria": "venda" }] }
 ```
 
 | Planilha | Campos de cada linha |
 | --- | --- |
 | `estoque` | `peca`, `quantidade`, `data` |
-| `caixa` | `tipo` (`entrou` ou `saiu`), `descricao`, `valor`, `data` |
+| `caixa` | `tipo` (`entrou` ou `saiu`), `descricao`, `valor`, `data`, `categoria` (opcional) |
 | `pedidos` | `cliente`, `peca`, `quantidade`, `situacao` (`A fazer`, `Pronto`, `Entregue`), `data` |
 
 Respostas de `PUT`: `200` com `{ "ok": true }` ou `204`.
@@ -98,9 +98,10 @@ A lista enviada substitui a anterior, na mesma ordem; lista vazia apaga tudo. Re
 - Textos (`peca`, `descricao`, `cliente`) obrigatórios, até 100 letras.
 - `quantidade`: inteiro; no estoque pode ser `0`, nos pedidos é no mínimo `1`.
 - `valor`: maior que zero, arredondado para centavos.
+- `categoria` (caixa, opcional): em entradas, `venda`, `servico` ou `outra-entrada`; em saídas, `material`, `pessoal`, `contas`, `maquina`, `transporte`, `impostos`, `retirada` ou `outra-saida`. Pode faltar ou vir `null`.
 - Até 1000 linhas por planilha.
 
-Erros (`400`): `linhas_invalidas`, `linha_invalida`, `planilha_muito_grande`, `peca_invalida`, `descricao_invalida`, `cliente_invalido`, `quantidade_invalida`, `tipo_invalido`, `situacao_invalida`, `valor_invalido`, `data_invalida`. Outro `id` além dos três: `404` com `{ "erro": "rota_nao_encontrada" }`.
+Erros (`400`): `linhas_invalidas`, `linha_invalida`, `planilha_muito_grande`, `peca_invalida`, `descricao_invalida`, `cliente_invalido`, `quantidade_invalida`, `tipo_invalido`, `situacao_invalida`, `valor_invalido`, `data_invalida`, `categoria_invalida`. Outro `id` além dos três: `404` com `{ "erro": "rota_nao_encontrada" }`.
 
 `GET /planilhas/:id`: `200` com `{ "linhas": [...] }` no mesmo formato (lista vazia se não houver nada).
 

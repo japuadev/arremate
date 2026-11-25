@@ -30,7 +30,8 @@ public class PlanilhaMapper {
                 linha.getTipo(),
                 linha.getDescricao(),
                 linha.getValor(),
-                formatar(linha.getData())
+                formatar(linha.getData()),
+                linha.getCategoria()
         );
     }
 

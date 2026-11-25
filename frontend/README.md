@@ -26,7 +26,7 @@ O app usa a **Web Speech API**. No Chrome, ela envia o áudio ao serviço de rec
 | `voz/reconhecimento.js` | Liga o microfone em `pt-BR` e trata os erros |
 | `voz/comandos.js` | Transforma a frase em ação; é coberto por testes |
 | `voz/interface-voz.js` | Folha "Falar", execução dos comandos e anotações |
-| `voz/sintese.js` | Botão "Ouvir": lê um trecho por vez e escurece o resto da tela |
+| `voz/sintese.js` | Botão "Ouvir": lê um trecho por vez, destaca o trecho e a palavra falada e controla pausa, voltar e pular |
 | `voz/leitura.js` | Define o que conta como trecho de leitura |
 
 Limites importantes:
@@ -46,22 +46,37 @@ Comando de uma tela: devolva-o no método `voz()` da página.
 voz: () => [{ rotulo: 'Continuar', frases: ['continuar', 'proximo'], fazer: avancar }],
 ```
 
-## Vídeos das aulas
+## Telas do passo a passo
 
-O espaço aparece no primeiro passo de cada aula. Para colocar um vídeo definitivo, edite `src/dados/videos.js` usando o id da aula:
+Cada passo das aulas mostra a tela do celular desenhada, com o dedo indicando onde tocar e uma moldura tracejada no que precisa ser conferido. As telas ficam em `src/dados/telas.js`, com a chave `<id da aula>-<número do passo>`:
 
 ```js
-export const VIDEOS = {
-  f2: 'https://www.youtube.com/watch?v=CODIGO',   // YouTube
-  o1: './videos/excel-basico.mp4',                // arquivo em public/videos/
-};
+'d1-2': () => ({
+  descricao: 'Tela de confirmação do Pix com o nome de quem vai receber marcado.',
+  svg: `${cabecalho('Confirme o Pix')}
+    ${texto(30, 178, t('Maria das Graças Silva'), { tam: 13.5, peso: 700 })}
+    ${olheAqui(22, 145, 196, 60)}
+    ${botao(40, 236, 160, 'Confirmar')}`,
+}),
 ```
 
-O campo "Cole o link do vídeo" serve para testar: guarda o link só naquele aparelho. Antes de publicar, troque `PERMITIR_COLAR_VIDEO` para `false`. O player do YouTube só funciona em `localhost` ou `https://`; no protótipo aberto com dois cliques, a capa leva ao YouTube.
+As peças (`celular`, `toque`, `olheAqui`, `navegador`, `campo`, `linhaLista`, `bolha`, `documento`, `grade`, `telaDeApps`) ficam em `src/componentes/telas.js` e usam uma área de 240 × 320. A `descricao` é lida por leitores de tela. As telas são genéricas, sem marca de banco ou aplicativo, porque cada celular mostra telas um pouco diferentes. Passo sem tela mostra a tabela de exemplo ou o ícone da aula.
+
+## Finanças e Excel
+
+A aba **Caixa** abre o painel do mês (`paginas/planilhas.js`): quanto entrou, saiu e sobrou, comparação com o mês anterior e para onde foi o dinheiro, por categoria. As contas ficam em `app/financas.js` (com testes) e as categorias em `dados/modelos.js`. Na anotação por voz, a categoria é adivinhada pela descrição ("paguei 40 reais de linha" vai para Tecido e aviamento).
+
+O botão **Baixar planilha** gera um `.xlsx` de verdade (`app/exportar.js`), sem biblioteca: `app/xlsx.js` monta o arquivo e o zip. O arquivo tem as abas Resumo, Caixa, Estoque, Pedidos e Preço da peça, com fórmulas, listas de escolha e cores. Abre no Excel, no Google Planilhas e no LibreOffice.
+
+A calculadora **Preço da peça** fica só no aparelho (`estado.calculos`), não vai para a API.
 
 ## Links das aulas
 
 Os endereços ficam em `src/dados/links.js`. Cada passo aceita `links: [...]` e cada aula aceita `saibaMais: [...]`, em `src/dados/trilhas.js`.
+
+## Materiais de gestão
+
+Cursos, cartilhas, planilhas e capacitações grátis (Sebrae, Banco Central, Febraban, gov.br e NTCPE) ficam em `src/dados/materiais.js`. Cada material diz em que trilhas aparece (`trilhas`) e em que assunto da página **Materiais de gestão** entra (`temas`). Eles aparecem no fim de cada trilha, no fim das aulas, no painel do caixa e na calculadora de preço. Os endereços foram conferidos em novembro de 2026; revise antes de cada entrega.
 
 ## Personalização
 
