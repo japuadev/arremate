@@ -162,7 +162,11 @@ export function paginaPlanilha(id, ctx) {
       </fieldset>
       <div class="grupo-campo">
         <label for="quando">Data</label>
-        <input class="campo" id="quando" name="quando" type="date" value="${hojeIso()}" max="${hojeIso()}" />
+        <div class="linha-campo">
+          <input class="campo" id="quando" name="quando" type="date" value="${hojeIso()}" max="${hojeIso()}" />
+          <button type="button" class="botao-mic" data-ditar="quando" aria-label="Falar a data">${icone('mic')}</button>
+        </div>
+        <p class="campo-ajuda" data-msg="quando" aria-live="polite"></p>
       </div>`;
   }
 

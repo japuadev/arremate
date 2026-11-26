@@ -4,6 +4,7 @@
 import { estado } from './estado.js';
 import { icone } from '../componentes/icones.js';
 import { logo } from '../componentes/logo.js';
+import { ligarDitado } from '../componentes/ditado.js';
 import { ligarVerMais } from '../componentes/comuns.js';
 import { redirecionarAntiga } from './utilidades.js';
 import { ouvirTela, pararFala, aoMudarFala, estadoLeitura, pausarOuContinuar, trechoAnterior, proximoTrecho } from '../voz/sintese.js';
@@ -165,6 +166,7 @@ export function desenhar({ focar = false } = {}) {
   ligarDoca();
   p.montar?.(raiz.querySelector('#conteudo'));
   ligarVerMais(raiz.querySelector('#conteudo'));
+  ligarDitado(raiz.querySelector('#conteudo')); // todo campo de escrita aceita voz
   definirTelaAtual({ comandos: () => p.voz?.() || [], exemplos: () => p.exemplosVoz?.() || (p.voz?.() || []).map((c) => c.rotulo), ler: lerPagina });
   if (focar) raiz.querySelector('h1')?.focus({ preventScroll: true });
   else window.scrollTo(0, y);

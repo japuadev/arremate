@@ -55,3 +55,34 @@ test('opções por número ou ordinal', () => {
   interpretar('a primeira', c).comando.fazer(); assert.equal(r, 0);
 });
 test('dígitos falados não somam', () => assert.equal(digitosFalados('oitenta e um nove nove oito'), '81998'));
+
+test('valor falado em reais', async () => {
+  const { valorFalado } = await import('../src/voz/comandos.js');
+  assert.equal(valorFalado('trezentos e cinquenta reais'), '350');
+  assert.equal(valorFalado('50 reais e 30 centavos'), '50,30');
+  assert.equal(valorFalado('cinquenta reais e trinta centavos'), '50,30');
+  assert.equal(valorFalado('R$ 1.200'), '1200');
+  assert.equal(valorFalado('R$ 12,50'), '12,50');
+  assert.equal(valorFalado('mil e quinhentos'), '1500');
+  assert.equal(valorFalado('banana'), 'banana');
+});
+
+test('quantidade falada', async () => {
+  const { inteiroFalado } = await import('../src/voz/comandos.js');
+  assert.equal(inteiroFalado('vinte e cinco'), '25');
+  assert.equal(inteiroFalado('30 por cento'), '30');
+  assert.equal(inteiroFalado('120 peças'), '120');
+});
+
+test('data falada', async () => {
+  const { dataFalada } = await import('../src/voz/comandos.js');
+  const hoje = new Date(2026, 10, 25); // 25/11/2026
+  assert.equal(dataFalada('hoje', hoje), '2026-11-25');
+  assert.equal(dataFalada('ontem', hoje), '2026-11-24');
+  assert.equal(dataFalada('anteontem', hoje), '2026-11-23');
+  assert.equal(dataFalada('dia vinte', hoje), '2026-11-20');
+  assert.equal(dataFalada('dia 28', hoje), '2026-10-28'); // futuro vira mês anterior
+  assert.equal(dataFalada('três de outubro', hoje), '2026-10-03');
+  assert.equal(dataFalada('vinte de dezembro', hoje), '2025-12-20'); // futuro vira ano anterior
+  assert.equal(dataFalada('semana que vem', hoje), null);
+});

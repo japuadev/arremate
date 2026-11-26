@@ -1,6 +1,6 @@
 import { estado } from '../app/estado.js';
 import { campo, faixaSimulacao, passos } from '../componentes/comuns.js';
-import { ligarDitado } from '../componentes/ditado.js';
+import { ligarDitado, converterFala } from '../componentes/ditado.js';
 import { icone } from '../componentes/icones.js';
 import { esc, ir, reais, soDigitos } from '../app/utilidades.js';
 import { pecaAtual, tipoAtual } from '../personalizacao/perfil.js';
@@ -44,7 +44,7 @@ function fluxo(ctx, { titulo, voltarPara, etapas, concluir }) {
         ${e.opcoes ? '' : `<button class="botao botao-principal" data-prox>${esc(e.botao || 'Continuar')}</button>`}`;
     },
     montar(raiz) {
-      ligarDitado(raiz, (t, id) => (id === 'cep' || id === 'valor' ? digitosFalados(t) : t));
+      ligarDitado(raiz, (t, id, c) => (id === 'cep' ? digitosFalados(t) : converterFala(t, c)));
       raiz.querySelector('[data-prox]')?.addEventListener('click', avancar);
       raiz.querySelectorAll('[data-op]').forEach((b) => b.addEventListener('click', () => escolher(Number(b.dataset.op))));
     },

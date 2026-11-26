@@ -53,6 +53,50 @@ export function digitosFalados(texto) {
   return saida;
 }
 
+// Valor em reais falado: "trezentos e cinquenta reais" -> "350"; "50 reais e 30 centavos" -> "50,30";
+// "R$ 1.200" -> "1200". Devolve o texto como foi ouvido se não achar número (a validação avisa).
+export function valorFalado(texto) {
+  const bruto = String(texto ?? '').replace(/(\d)\.(\d{3})(?!\d)/g, '$1$2');
+  const t = numerosEmDigitos(normalizar(bruto));
+  const comCentavos = t.match(/(\d+)\s*(?:reais|real)?\s*(?:e|com)\s*(\d{1,2})\s*centavos?/);
+  let n;
+  if (comCentavos) n = Number(comCentavos[1]) + Number(comCentavos[2]) / 100;
+  else if (/^(\d{1,2})\s*centavos?$/.test(t)) n = Number(t.match(/\d+/)[0]) / 100;
+  else {
+    const m = t.match(/\d+(?:\.\d+)?/);
+    if (!m) return String(texto ?? '').trim();
+    n = Number(m[0]);
+  }
+  return Number.isInteger(n) ? String(n) : n.toFixed(2).replace('.', ',');
+}
+
+// Quantidade, peças, porcentagem: "vinte e cinco" -> "25".
+export function inteiroFalado(texto) {
+  const v = valorFalado(texto);
+  const n = Number(v.replace(',', '.'));
+  return Number.isFinite(n) && v !== '' ? String(Math.round(n)) : v;
+}
+
+const MESES = ['janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+// Data falada: "hoje", "ontem", "anteontem", "dia 20", "vinte de novembro" -> "2026-11-20".
+// Nunca devolve data futura (vale o mês/ano anterior). null = não entendeu.
+export function dataFalada(texto, hoje = new Date()) {
+  const t = numerosEmDigitos(normalizar(texto));
+  const menos = (dias) => { const d = new Date(hoje); d.setDate(d.getDate() - dias); return iso(d); };
+  if (/\banteontem\b/.test(t)) return menos(2);
+  if (/\bontem\b/.test(t)) return menos(1);
+  if (/\bhoje\b/.test(t)) return menos(0);
+  const dia = t.match(/(?:^|\bdia\s+)(\d{1,2})\b/) || t.match(/\b(\d{1,2})\s+de\s+[a-z]/);
+  if (!dia) return null;
+  const mesIdx = MESES.findIndex((m) => contem(t, m));
+  let d = new Date(hoje.getFullYear(), mesIdx >= 0 ? mesIdx : hoje.getMonth(), Number(dia[1]));
+  if (d.getDate() !== Number(dia[1])) return null;
+  if (d > hoje) d = mesIdx >= 0 ? new Date(d.getFullYear() - 1, d.getMonth(), d.getDate()) : new Date(d.getFullYear(), d.getMonth() - 1, d.getDate());
+  return iso(d);
+}
+
 const contem = (texto, frase) => ` ${texto} `.includes(` ${frase} `);
 
 function melhorEntre(texto, comandos) {

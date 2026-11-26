@@ -45,7 +45,8 @@ export function passos(atual, total, titulo = '') {
   </div>`;
 }
 
-export function campo({ id, rotulo, valor = '', tipo = 'text', modo = '', ajuda = '', erro = '', comVoz = false, maximo = '' }) {
+// Todo campo de escrita tem microfone (comVoz: false só para casos especiais).
+export function campo({ id, rotulo, valor = '', tipo = 'text', modo = '', ajuda = '', erro = '', comVoz = true, maximo = '' }) {
   return `<div class="grupo-campo ${erro ? 'grupo-erro' : ''}">
     <label for="${id}">${esc(rotulo)}</label>
     <div class="linha-campo">
